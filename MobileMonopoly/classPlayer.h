@@ -1,0 +1,108 @@
+#pragma once
+#include <iostream>
+#include <vector>
+#include <string>
+#include <math.h>
+
+using namespace std;
+
+class classPlayer {
+private:
+	string playerName;				/*Used as the playername during the entire program.*/
+	int playerMoney;				/*Used as the money for each player during the entire progam.*/
+	int amountOfMyFields = 0;		/*Tells how many fields each player possesses.*/
+	int currentPosition = 0;		/*Tells the current position of a player on the gamefield.*/
+	vector<string>myGroupStrings[9];
+	vector<int>myGroup[9];
+	vector <int> myField[40];		/*Tells the number of the field belonging to the player.*/
+	bool isGroup = false;
+	bool isMyField = false;			/*Checks if the current field, a player is standing on belongs to the player.*/
+	bool IsInJail = false;			/*Checks if the a player is in jail at the moment.*/
+	bool isLendingMoney = false;	/*Checks if the a player is currently lending money for the bank.*/
+public:
+
+	classPlayer(string nameValue, int moneyValue) {			/*Constructor of classPlayer.*/
+		playerName = nameValue;												/*Hands over the value for playerName and playerMoney*/
+		playerMoney = moneyValue;
+		myGroupStrings->resize(9);
+		myGroup->resize(9);
+	}
+
+	
+
+	/*Calling Set-Methods*/
+
+	void setPlayerName(string value) {		/*Applies the handed over value to playerName.*/
+		playerName = value;
+	}
+	void setPlayerMoney(int value) {		/*Applies the handed over value to playerMoney.*/
+		playerMoney = value;
+	}
+	void losePlayerMoney(int value) {		/*Reduces the amount of playerMoney by the handed over value.*/
+		playerMoney -= value;
+	}
+	void addPlayerMoney(int value) {		/*Increases the amount of playerMoney by the handed over value.*/
+		playerMoney += value;
+	}
+	void setNewPosition(int value) {		/*Sets the new position of the player on the gamefield by adding the value of the dice to the current position.*/
+		int difference = 0;								/*In case the current position plus the value of the dice exceeds the amount of 39,*/
+		int diffToGo;									/*the difference is calculated and the player starts again from field 0.*/
+		if (currentPosition + value == 40) {			/*2000 is added to the variable playerMoney.*/
+			currentPosition = 0;
+		}
+		else if (currentPosition + value > 39 && currentPosition + value != 40) {
+			system("cls");
+			cout << "You passed START and got 2000!\n\n";
+			system("pause");
+			playerMoney += 2000;
+			diffToGo = value - 1 - difference;
+			difference = 39 - currentPosition;
+			currentPosition = currentPosition + difference;
+			currentPosition = 0;
+			currentPosition += diffToGo;
+		}
+		else currentPosition += value;
+	}
+	void addToMyGroupStrings(string fieldName, int value) {			/*Change the string of myGroupStrings to the handed over value on the handed over position.*/
+		myGroupStrings->at(value) = myGroupStrings->at(value) + fieldName + ", ";
+	}
+	void addToMyGroup(int value, int position) {			/*Increases the value of the position in myGroup based on the handed over value.*/
+		myGroup->at(position) += value;
+	}
+	bool checkforFullGroup(int position, int value2Group, int value3Group) {
+		if (myGroup->at(position) == value2Group || myGroup->at(position) == value3Group) {
+			return true;
+		}
+		else { return false; }
+	}
+	void addMyField(int value) {			/*Pushes the handed over value to the vector myField.*/
+		myField->push_back(value);
+	}
+	void setIsMyField(bool value) {		/*Switches isMyField between true and false, depending on the handed over value.*/
+		isMyField = value;
+	}
+	void setIsInJail(bool value) {			/*Switches IsInJail between true and false, depending on the handed over value.*/
+		IsInJail = value;
+	}
+
+	/*Calling Get-Methods*/
+
+	string getPlayerName() { return playerName; }
+	int getPlayerMoney() { return playerMoney; }
+	int getAmountOfMyFields() { return amountOfMyFields; }
+	int getCurrentPosition() { return currentPosition; }
+	void getMyGroupStrings() {
+		cout << "\n";
+		for (int x = 0; x < myGroupStrings->size(); x++) {
+			cout << "\tGroup " << x << ": " << myGroupStrings->at(x) << "\n";
+		}
+	}
+	void getMyField() {
+		for (int x = 0; x < myField->size(); x++) {
+			cout << myField->at(x) << " ";
+		}
+	}
+	bool getIsMyField() { return isMyField; }
+	bool getIsInJail() { return IsInJail; }
+	bool getIsLendingMoney() { return isLendingMoney; }
+};
