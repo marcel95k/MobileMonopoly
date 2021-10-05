@@ -460,12 +460,23 @@ purchasAbleFieldsBegin:
 			cout << classGameFieldVector->at(field).getFieldName();
 			cout << "\n\nHOUSES:\t\t" << classGameFieldVector->at(field).getAmoutOfHouses();
 			cout << "\n\nRent:\t\t\tBase:\t\t" << classGameFieldVector->at(field).getBaseRent();
-			cout << "\n\t\t\tFull group:\t" << classGameFieldVector->at(field).getBaseRent();
-			cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
-			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2;
-			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2;
-			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2;
-			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2 * 2;
+			cout << "\n\t\t\tFull group:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
+			cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getBaseRent() * 3;
+			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2;
+			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2;
+			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2 * 2;
+			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2 * 2 * 2;
+			cout << "\n\n";
+			system("pause");
+			goto purchasAbleFieldsBegin;
+		}
+		else if (userInput == 2 && classGameFieldVector->at(field).getGroupPosition() == 0) {
+			system("cls");																						/*Displaying the info of the field when it is a port.*/
+			cout << classGameFieldVector->at(field).getFieldName();
+			cout << "\n\nRent:\t\t\t1 Port:\t\t" << classGameFieldVector->at(field).getBaseRent();
+			cout << "\n\t\t\t2 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
+			cout << "\n\t\t\t3 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2;
+			cout << "\n\t\t\t4 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2;
 			cout << "\n\n";
 			system("pause");
 			goto purchasAbleFieldsBegin;
