@@ -28,8 +28,6 @@ classPlayer::classPlayer(string nameValue, int moneyValue) {			/*Constructor of 
 	myGroup->resize(9);
 }
 
-classPlayer::~classPlayer() {}		/*Destructor of classPlayer.*/
-
 /*Calling Set-Methods*/
 
 void classPlayer::setPlayerName(string value) {		/*Applies the handed over value to playerName.*/
