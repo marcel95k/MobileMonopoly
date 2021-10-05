@@ -1,7 +1,5 @@
 #include <vector>
 #include <iostream>
-#include <Windows.h>
-#include <stdio.h>
 #include <string>
 #include <stdlib.h>
 #include <math.h>
@@ -18,13 +16,13 @@ using namespace std;
 void setUpGameField(vector <string>* gameFieldStringsValue);
 void setUpPlayerStats(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector);
 void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector);
-void eventFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer);
+void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer);
 void purchasAbleFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer);
+void eventsAndCommunityFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer);
 void trade(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer, int* selectedPlayer);
 int rollDice();
 
 int main() {
-	
 
 	/*First declaration of all fieldnames as strings in a vector.*/
 	vector <string> gameFieldStrings = {
@@ -177,11 +175,11 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 			classPlayerVector->erase(classPlayerVector->begin() + thisPlayer);
 		}
 		if (classPlayerVector->at(thisPlayer).getIsInJail() == true) {	/*Check if the current player is in jail*/
-			cout << "You are in jail!\nPay 100!\n\n";					/*and let the player pay.*/
+			cout << "You are in jail!\nPay 500!\n\n";					/*and let the player pay.*/
 			system("pause");											/*Afterwards the player is put on the VISIT field.*/
 			cout << "\n";
 			cout << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\x1B[31m - 100\033[0m\n";
-			classPlayerVector->at(thisPlayer).losePlayerMoney(100);
+			classPlayerVector->at(thisPlayer).losePlayerMoney(500);
 			cout << "NEW MONEY: " << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\n\n";
 			classPlayerVector->at(thisPlayer).goBackOnField(20);
 			classPlayerVector->at(thisPlayer).setIsInJail(false);
@@ -205,7 +203,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 		if (userInput == 1) {
 			classPlayerVector->at(thisPlayer).setNewPosition(rollDice());															/*Sets the new position of the player by calling the function rollDice().*/
 			if (classGameFieldVector->at(classPlayerVector->at(thisPlayer).getCurrentPosition()).getIsPurchasable() == false) {		/*Then it will be checked if the player landed on a purchasable field or not.*/
-				eventFields(classGameFieldVector, classPlayerVector, &thisPlayer);
+				nonPurchasAbleFields(classGameFieldVector, classPlayerVector, &thisPlayer);
 			}
 			else if (classGameFieldVector->at(classPlayerVector->at(thisPlayer).getCurrentPosition()).getIsPurchasable() == true) {
 				purchasAbleFields(classGameFieldVector, classPlayerVector, &thisPlayer);
@@ -265,7 +263,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 	}
 }
 
-void eventFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer) {		/*Event fields:*/
+void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer) {		/*Event fields:*/
 	int field = classPlayerVector->at(*thisPlayer).getCurrentPosition();														/*The string of the event fields in checked*/
 	system("cls");																												/*and make happen the event based on the name*/
 	if (classGameFieldVector->at(field).getFieldName() == "START") {															/*of the event field.*/
@@ -277,6 +275,8 @@ void eventFields(vector <classGameField>* classGameFieldVector, vector <classPla
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "COMMUNITY FIELD") {
 		cout << "YOU LANDED ON A COMMUNITY FIELD!\n\n";
+		system("pause");
+		eventsAndCommunityFields(classGameFieldVector, classPlayerVector, thisPlayer);
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "INCOME TAX") {
 		cout << "YOU NEED TO PAY 2000 INCOME TAX!\n\n";
@@ -287,6 +287,7 @@ void eventFields(vector <classGameField>* classGameFieldVector, vector <classPla
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "EVENT FIELD") {
 		cout << "YOU LANDED ON AN EVENT FIELD!\n\n";
+		system("pause");
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "VISIT/JAIL") {
 		cout << "You are at VISIT/JAIL!\n\n";
@@ -334,6 +335,11 @@ purchasAbleFieldsBegin:
 		cout << "\nOption: ";
 		cin >> userInput;
 		if (userInput == 1) {
+			if (classPlayerVector->at(*thisPlayer).getPlayerMoney() <= classGameFieldVector->at(field).getPrice()) {
+				system("cls");
+				cout << "You don't have enough money to purchase this field!\n\n";
+				goto purchasAbleFieldsBegin;
+			}
 			cout << "\n";
 			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - ";
 			cout << classGameFieldVector->at(field).getPrice();
@@ -387,7 +393,7 @@ purchasAbleFieldsBegin:
 		cout << "RENT:\t" << classGameFieldVector->at(field).getRent();
 		cout << "\nMONEY:\t" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		cout << "[1] PAY\n";
-		cout << "Pay: ";
+		cout << "Option: ";
 		cin >> userInput;
 		if (userInput != 1) { goto purchasAbleFieldsBegin; }
 		cout << "\n";
@@ -441,7 +447,7 @@ purchasAbleFieldsBegin:
 					cout << "\nNEW RENT: " << classGameFieldVector->at(field).getRent() << "\n\n";
 					system("pause");
 				}
-				else if (classGameFieldVector->at(field).getFieldType() == "Port") {			/*Checking if the current field is a port.*/
+				else if (classGameFieldVector->at(field).getFieldType() == "Port") {		/*Checking if the current field is a port.*/
 					system("cls");
 					cout << "You can't build on ports!\n\n";
 					system("pause");
@@ -480,6 +486,26 @@ purchasAbleFieldsBegin:
 			cout << "\n\n";
 			system("pause");
 			goto purchasAbleFieldsBegin;
+		}
+	}
+}
+
+void eventsAndCommunityFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer) {
+	srand(time(NULL));
+	int userInput;
+	int getRandomEvent = rand() % 20 + 1;
+	system("cls");
+	if (getRandomEvent == 1) {
+		cout << "You got a ticket for speeding!\n";
+		cout << "Pay 150!\n\n";
+		cout << "[1] PAY\n";
+		cout << "Option: ";
+		cin >> userInput;
+		if (userInput == 1) {
+			classPlayerVector->at(*thisPlayer).losePlayerMoney(150);
+			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 150\033[0m\n";	
+			classPlayerVector->at(*thisPlayer).losePlayerMoney(150);
+			cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney();
 		}
 	}
 }
