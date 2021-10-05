@@ -1,5 +1,7 @@
 #include <vector>
 #include <iostream>
+#include <Windows.h>
+#include <stdio.h>
 #include <string>
 #include <stdlib.h>
 #include <math.h>
@@ -18,15 +20,17 @@ void setUpPlayerStats(vector <classGameField>* classGameFieldVector, vector <cla
 void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector);
 void eventFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer);
 void purchasAbleFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer);
+void trade(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer, int* selectedPlayer);
 int rollDice();
 
 int main() {
+	
 
 	/*First declaration of all fieldnames as strings in a vector.*/
 	vector <string> gameFieldStrings = {
 		/*LINE 1*/	"START", "\x1B[1;30mBREMEN\033[0m", "COMMUNITY FIELD", "\x1B[1;30mMUSCAT\033[0m", "INCOME TAX", "PORT 1", "\x1B[36mATHENS\033[0m", "EVENT FIELD", "\x1B[36mHELSINKI\033[0m", "\x1B[36mKIEW\033[0m",
 
-		/*LINE 2*/	"VISIT", "\x1B[35mCOPENHAGEN\033[0m", "BANK", "\x1B[35mAMSTERDAM\033[0m", "\x1B[35mLUXEMBURG\033[0m", "PORT 2", "\x1B[2;33mJAKARTA\033[0m", "COMMUNITY FIELD", "\x1B[2;33mCOLOMBO\033[0m", "\x1B[2;33mDOHA\033[0m",
+		/*LINE 2*/	"VISIT/JAIL", "\x1B[35mCOPENHAGEN\033[0m", "BANK", "\x1B[35mAMSTERDAM\033[0m", "\x1B[35mLUXEMBURG\033[0m", "PORT 2", "\x1B[2;33mJAKARTA\033[0m", "COMMUNITY FIELD", "\x1B[2;33mCOLOMBO\033[0m", "\x1B[2;33mDOHA\033[0m",
 
 		/*LINE 3*/	"FREE PARKING", "\x1B[31mNEW DELHI\033[0m", "EVENT FIELD", "\x1B[31mKATHMANDU\033[0m", "\x1B[31mKUALA LUMPUR\033[0m", "PORT 3", "\x1B[1;33mNICOSIA\033[0m", "\x1B[1;33mSKOPJE\033[0m", "BANK", "\x1B[1;33mBRUSSELS\033[0m",
 
@@ -68,35 +72,37 @@ void setUpGameField(vector <string>* gameFieldStringsValue) {
 	gameFieldVector.at(36).setIsPurchasable(false);	/*SET THIRD EVENT FIELD NOT PURCHASABLE*/
 	gameFieldVector.at(38).setIsPurchasable(false);	/*SET ADDITIONAL TAX NOT PURCHASABLE*/
 
-	/*Set prices for purchasable fields.*/
-																								/**************************************************************/
-	gameFieldVector.at(1).setPrice(600, 500, 20, 1);			/*BREMEN*/						/*					Group1: BREMEN							  */
-	gameFieldVector.at(3).setPrice(600, 500, 40, 1);			/*MUSCAT*/						/*							MUSCAT				              */
-	gameFieldVector.at(5).setPrice(2000, 0, 250, 0);			/*PORT 1*/						/*                                                            */
-	gameFieldVector.at(6).setPrice(1000, 500, 60, 2);			/*ATHENS*/						/*					Group2: ATHENS							  */
-	gameFieldVector.at(8).setPrice(1000, 500, 60, 2);			/*HELSINKI*/					/*							HELSINKI				          */
-	gameFieldVector.at(9).setPrice(1200, 500, 80, 2);			/*KIEW*/						/*							KIEW				              */
-	gameFieldVector.at(11).setPrice(1400, 1000, 100, 3);		/*COPENHAGEN*/					/*					Group3: COPENHAGEN						  */
-	gameFieldVector.at(13).setPrice(1400, 1000, 100, 3);		/*AMSTERDAM*/					/*							HELSINKI				          */
-	gameFieldVector.at(14).setPrice(1600, 1000, 120, 3);		/*LUXEMBURG*/					/*							LUXEMBURG				          */
-	gameFieldVector.at(15).setPrice(2000, 0, 250, 0);			/*PORT 2*/						/*                                                            */
-	gameFieldVector.at(16).setPrice(1800, 1000, 140, 4);		/*JAKARTA*/						/*					Group4:	JAKARTA							  */
-	gameFieldVector.at(18).setPrice(1800, 1000, 140, 4);		/*COLOMBO*/						/*							COLOMBO							  */
-	gameFieldVector.at(19).setPrice(2000, 1000, 160, 4);		/*DOHA*/						/*							DOHA					          */
-	gameFieldVector.at(21).setPrice(2200, 1500, 180, 5);		/*NEW DELHI*/					/*					Group5:	NEW DELHI						  */
-	gameFieldVector.at(23).setPrice(2200, 1500, 180, 5);		/*KATHMANDU*/					/*							KATHMANDU					      */
-	gameFieldVector.at(24).setPrice(2400, 1500, 200, 5);		/*KUALA LUMPUR*/				/*							KUALA LUMPUR					  */
-	gameFieldVector.at(25).setPrice(2000, 0, 250, 0);			/*PORT 3*/						/*                                                            */
-	gameFieldVector.at(26).setPrice(2600, 1500, 220, 6);		/*NICOSIA*/						/*					Group6:	NICOSIA					     	  */
-	gameFieldVector.at(27).setPrice(2600, 1500, 220, 6);		/*SKOPJE*/						/*							SKOPJE						      */
-	gameFieldVector.at(29).setPrice(2800, 1500, 240, 6);		/*BRUSSELS*/					/*							BRUSSELS						  */
-	gameFieldVector.at(31).setPrice(3000, 2000, 260, 7);		/*SAN MARINO*/					/*					Group7:	SAN MARINO					      */
-	gameFieldVector.at(32).setPrice(3000, 2000, 260, 7);		/*MONACO*/						/*							MONACO			     			  */
-	gameFieldVector.at(34).setPrice(3200, 2000, 280, 7);		/*VALLETTA*/					/*							VALLETTA					      */
-	gameFieldVector.at(35).setPrice(2000, 0, 250, 0);			/*PORT 4*/						/*                                                            */
-	gameFieldVector.at(37).setPrice(3500, 2000, 350, 8);		/*SZEGED*/						/*					Group8:	SZEGED					     	  */
-	gameFieldVector.at(39).setPrice(4000, 2000, 500, 8);		/*VIENNA*/						/*							VIENNA					     	  */
-																								/**************************************************************/
+	/*Set field stats for purchasable fields.  */
+	/*(Handover takes place in the following order :*/
+	/*Price, Price Per House, Base Rent, Rent, Group Position, Field Type)*/
+																												/**************************************************************/
+	gameFieldVector.at(1).setFieldStats(600, 500, 20, 20, 1, "2group");			/*BREMEN*/						/*					Group1: BREMEN							  */
+	gameFieldVector.at(3).setFieldStats(600, 500, 40, 40, 1, "2group");			/*MUSCAT*/						/*							MUSCAT				              */
+	gameFieldVector.at(5).setFieldStats(2000, 0, 250, 250, 0, "Port");			/*PORT 1*/						/*                                                            */
+	gameFieldVector.at(6).setFieldStats(1000, 500, 60, 60, 2, "3group");		/*ATHENS*/						/*					Group2: ATHENS							  */
+	gameFieldVector.at(8).setFieldStats(1000, 500, 60, 60, 2, "3group");		/*HELSINKI*/					/*							HELSINKI				          */
+	gameFieldVector.at(9).setFieldStats(1200, 500, 80, 80, 2, "3group");		/*KIEW*/						/*							KIEW				              */
+	gameFieldVector.at(11).setFieldStats(1400, 1000, 100, 100, 3, "3group");	/*COPENHAGEN*/					/*					Group3: COPENHAGEN						  */
+	gameFieldVector.at(13).setFieldStats(1400, 1000, 100, 100, 3, "3group");	/*AMSTERDAM*/					/*							HELSINKI				          */
+	gameFieldVector.at(14).setFieldStats(1600, 1000, 120, 120, 3, "3group");	/*LUXEMBURG*/					/*							LUXEMBURG				          */
+	gameFieldVector.at(15).setFieldStats(2000, 0, 250, 250, 0, "Port");			/*PORT 2*/						/*                                                            */
+	gameFieldVector.at(16).setFieldStats(1800, 1000, 140, 140, 4, "3group");	/*JAKARTA*/						/*					Group4:	JAKARTA							  */
+	gameFieldVector.at(18).setFieldStats(1800, 1000, 140, 140, 4, "3group");	/*COLOMBO*/						/*							COLOMBO							  */
+	gameFieldVector.at(19).setFieldStats(2000, 1000, 160, 160, 4, "3group");	/*DOHA*/						/*							DOHA					          */
+	gameFieldVector.at(21).setFieldStats(2200, 1500, 180, 180, 5, "3group");	/*NEW DELHI*/					/*					Group5:	NEW DELHI						  */
+	gameFieldVector.at(23).setFieldStats(2200, 1500, 180, 180, 5, "3group");	/*KATHMANDU*/					/*							KATHMANDU					      */
+	gameFieldVector.at(24).setFieldStats(2400, 1500, 200, 200, 5, "3group");	/*KUALA LUMPUR*/				/*							KUALA LUMPUR					  */
+	gameFieldVector.at(25).setFieldStats(2000, 0, 250, 250, 0, "Port");			/*PORT 3*/						/*                                                            */
+	gameFieldVector.at(26).setFieldStats(2600, 1500, 220, 220, 6, "3group");	/*NICOSIA*/						/*					Group6:	NICOSIA					     	  */
+	gameFieldVector.at(27).setFieldStats(2600, 1500, 220, 220, 6, "3group");	/*SKOPJE*/						/*							SKOPJE						      */
+	gameFieldVector.at(29).setFieldStats(2800, 1500, 240, 240, 6, "3group");	/*BRUSSELS*/					/*							BRUSSELS						  */
+	gameFieldVector.at(31).setFieldStats(3000, 2000, 260, 260, 7, "3group");	/*SAN MARINO*/					/*					Group7:	SAN MARINO					      */
+	gameFieldVector.at(32).setFieldStats(3000, 2000, 260, 260, 7, "3group");	/*MONACO*/						/*							MONACO			     			  */
+	gameFieldVector.at(34).setFieldStats(3200, 2000, 280, 280, 7, "3group");	/*VALLETTA*/					/*							VALLETTA					      */
+	gameFieldVector.at(35).setFieldStats(2000, 0, 250, 250, 0, "Port");			/*PORT 4*/						/*                                                            */
+	gameFieldVector.at(37).setFieldStats(3500, 2000, 350, 350, 8, "2group");	/*SZEGED*/						/*					Group8:	SZEGED					     	  */
+	gameFieldVector.at(39).setFieldStats(4000, 2000, 500, 500, 8, "2group");	/*VIENNA*/						/*							VIENNA					     	  */
+																												/**************************************************************/
 
 	/*Call the function setUpPlayerStats() and hand over the vectors gameFieldVector and playerVector.*/
 	setUpPlayerStats(&gameFieldVector, &playerVector);
@@ -155,10 +161,11 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 	vector <string> displayPlayers;
 	displayPlayers.resize(classPlayerVector->size());
 	for (int thisPlayer = 0; thisPlayer < classPlayerVector->size(); thisPlayer++) {
+	gameRoundBegin:
 		for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {
 			displayPlayers.at(listPlayers) = classPlayerVector->at(listPlayers).getPlayerName();
 			if (displayPlayers.at(listPlayers) == classPlayerVector->at(thisPlayer).getPlayerName()) {
-				displayPlayers.at(listPlayers) = "\x1B[1;31m" + displayPlayers.at(listPlayers) + "\033[0m";
+				displayPlayers.at(listPlayers) = "\x1B[1;31m" + displayPlayers.at(listPlayers) + "\033[0m";		/*Make the drawing player colored for better visibility.*/
 			}
 			else { displayPlayers.at(listPlayers) = displayPlayers.at(listPlayers); }
 		}
@@ -171,11 +178,12 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 		}
 		if (classPlayerVector->at(thisPlayer).getIsInJail() == true) {	/*Check if the current player is in jail*/
 			cout << "You are in jail!\nPay 100!\n\n";					/*and let the player pay.*/
-			system("pause");
+			system("pause");											/*Afterwards the player is put on the VISIT field.*/
 			cout << "\n";
 			cout << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\x1B[31m - 100\033[0m\n";
 			classPlayerVector->at(thisPlayer).losePlayerMoney(100);
 			cout << "NEW MONEY: " << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\n\n";
+			classPlayerVector->at(thisPlayer).goBackOnField(20);
 			classPlayerVector->at(thisPlayer).setIsInJail(false);
 			system("pause");
 			system("cls");
@@ -188,37 +196,67 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 		cout << "MONEY:\t" << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\n";
 		cout << "CURRENT FIELD:\t" << classGameFieldVector->at(classPlayerVector->at(thisPlayer).getCurrentPosition()).getFieldName() << "\n\n";
 		cout << "[1] Roll Dice\n";
-		cout << "[2] VIEW PLAYER INFO\n";
-		cout << "[3] RESIGN\n\n";
+		cout << "[2] TRADE\n";
+		cout << "[3] VIEW PLAYER INFO\n";
+		cout << "[4] RESIGN\n\n";
 		cout << "Option: ";
 		cin >> userInput;
 
 		if (userInput == 1) {
-			classPlayerVector->at(thisPlayer).setNewPosition(rollDice());															/*Calls the function sets the new position of the player by calling the function rollDice().*/
+			classPlayerVector->at(thisPlayer).setNewPosition(rollDice());															/*Sets the new position of the player by calling the function rollDice().*/
 			if (classGameFieldVector->at(classPlayerVector->at(thisPlayer).getCurrentPosition()).getIsPurchasable() == false) {		/*Then it will be checked if the player landed on a purchasable field or not.*/
 				eventFields(classGameFieldVector, classPlayerVector, &thisPlayer);
 			}
 			else if (classGameFieldVector->at(classPlayerVector->at(thisPlayer).getCurrentPosition()).getIsPurchasable() == true) {
 				purchasAbleFields(classGameFieldVector, classPlayerVector, &thisPlayer);
 			}
-		}																															/****************************************/
-		else if (userInput == 2) {																									/*Viewing the info of a selected player.*/
-			system("cls");																											/*Currently viewing:					*/
-			cout << "Of which player do you want to see the info?\n\n";																/*				- Playername			*/
-			for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {										/*				- Money					*/
-				cout << "[" << listPlayers + 1 << "] " << classPlayerVector->at(listPlayers).getPlayerName() << "\n";				/*				- Current position		*/
-			}																														/*				- Possessing fields		*/
-			cout << "\nChoose: ";																									/*				  (position in numbers)	*/
-			cin >> userInput;																										/****************************************/
-			cout << "\nNAME:\t" << classPlayerVector->at(userInput - 1).getPlayerName() << "\n";
-			cout << "MONEY:\t" << classPlayerVector->at(userInput - 1).getPlayerMoney() << "\n";
+		}
+
+		else if (userInput == 2) {
+		tradeSection:
+			int tradePartner;
+			system("cls");
+			cout << "With which player do you want to trade?\n\n";
+			for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {
+				cout << "[" << listPlayers + 1 << "] " << classPlayerVector->at(listPlayers).getPlayerName() << "\n";
+			}
+			cout << "\nChoose: ";
+			cin >> userInput;
+			if (userInput == thisPlayer + 1) {
+				cout << "Trading with yourself wouldn't be adavntageous!\n\n";
+				system("pause");
+				goto tradeSection;
+			}
+			else if (userInput > classPlayerVector->size()) {
+				cout << "\nNo player found at this position!\n";
+				system("pause");
+				goto tradeSection;
+			}
+			else {
+				tradePartner = userInput - 1;
+				trade(classGameFieldVector, classPlayerVector, &thisPlayer, &tradePartner);
+			}
+		}
+
+		else if (userInput == 3) {																									/****************************************/
+			system("cls");																											/*Viewing the info of a selected player.*/
+			cout << "Of which player do you want to see the info?\n\n";																/*Currently viewing:					*/
+			for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {										/*				- Playername			*/
+				cout << "[" << listPlayers + 1 << "] " << classPlayerVector->at(listPlayers).getPlayerName() << "\n";				/*				- Money					*/
+			}																														/*				- Current position		*/
+			cout << "\nChoose: ";																									/*				- Possessing fields		*/
+			cin >> userInput;																										/*				  (Strings)				*/
+			cout << "\nNAME:\t\t" << classPlayerVector->at(userInput - 1).getPlayerName() << "\n";									/****************************************/
+			cout << "MONEY:\t\t" << classPlayerVector->at(userInput - 1).getPlayerMoney() << "\n";
 			cout << "CURRENT FIELD:\t" << classGameFieldVector->at(classPlayerVector->at(userInput - 1).getCurrentPosition()).getFieldName() << "\n\n";
-			cout << "GROUPS: ";
+			cout << "POSSESSIONS: ";
 			classPlayerVector->at(userInput - 1).getMyGroupStrings();
-			cout << "\n\n";
+			cout << "\n";
 			system("pause");
 			thisPlayer--;
 		}
+
+		else { goto gameRoundBegin; }
 
 
 		if (thisPlayer == classPlayerVector->size() - 1) {		/*Check if the iteration through the vector classPlayerVector*/
@@ -238,7 +276,7 @@ void eventFields(vector <classGameField>* classGameFieldVector, vector <classPla
 		cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "COMMUNITY FIELD") {
-
+		cout << "YOU LANDED ON A COMMUNITY FIELD!\n\n";
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "INCOME TAX") {
 		cout << "YOU NEED TO PAY 2000 INCOME TAX!\n\n";
@@ -248,10 +286,10 @@ void eventFields(vector <classGameField>* classGameFieldVector, vector <classPla
 		cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "EVENT FIELD") {
-
+		cout << "YOU LANDED ON AN EVENT FIELD!\n\n";
 	}
-	else if (classGameFieldVector->at(field).getFieldName() == "VISIT") {
-		cout << "You are just visiting the jail.\n\n";
+	else if (classGameFieldVector->at(field).getFieldName() == "VISIT/JAIL") {
+		cout << "You are at VISIT/JAIL!\n\n";
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "BANK") {
 		cout << "You are at the bank.\n\n";
@@ -275,7 +313,7 @@ void eventFields(vector <classGameField>* classGameFieldVector, vector <classPla
 		system("pause");
 		cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 1000\033[0m";
 		classPlayerVector->at(*thisPlayer).losePlayerMoney(1000);
-		cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney();
+		cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 	}
 	system("pause");
 }
@@ -311,16 +349,28 @@ purchasAbleFieldsBegin:
 			cout << "\n\n";
 			system("pause");
 		}
-		else if (userInput == 2) {
+		else if (userInput == 2 && classGameFieldVector->at(field).getGroupPosition() != 0) {
 			system("cls");																						/*Displaying the info of the field.*/
 			cout << classGameFieldVector->at(field).getFieldName();
 			cout << "\n\nPrice Per House:\t" << classGameFieldVector->at(field).getPricePerHouse();
-			cout << "\n\nRent:\t\t\tBase:\t\t" << classGameFieldVector->at(field).getRent();
-			cout << "\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getRent() * 2;
-			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getRent() * 2 * 2;
-			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getRent() * 2 * 2 * 2;
-			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getRent() * 2 * 2 * 2 * 2;
-			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getRent() * 2 * 2 * 2 * 2 * 2;
+			cout << "\n\nRent:\t\t\tBase:\t\t" << classGameFieldVector->at(field).getBaseRent();
+			cout << "\n\t\t\tFull group:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
+			cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getBaseRent() * 3;
+			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2;
+			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2;
+			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2 * 2;
+			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2 * 2 * 2;
+			cout << "\n\n";
+			system("pause");
+			goto purchasAbleFieldsBegin;
+		}
+		else if (userInput == 2 && classGameFieldVector->at(field).getGroupPosition() == 0) {
+			system("cls");																						/*Displaying the info of the field when it is a port.*/
+			cout << classGameFieldVector->at(field).getFieldName();
+			cout << "\n\nRent:\t\t\t1 Port:\t\t" << classGameFieldVector->at(field).getBaseRent();
+			cout << "\n\t\t\t2 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
+			cout << "\n\t\t\t3 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2;
+			cout << "\n\t\t\t4 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2;
 			cout << "\n\n";
 			system("pause");
 			goto purchasAbleFieldsBegin;
@@ -333,13 +383,13 @@ purchasAbleFieldsBegin:
 		system("cls");
 		cout << classGameFieldVector->at(field).getFieldName() << "\n\n";
 		cout << "BELONGS TO:\t" << classGameFieldVector->at(field).getBelongsTo();
-		cout << "\nHOUSES: \t" << classGameFieldVector->at(field).getAmoutOfHouses();
-		cout << "\nMONEY:\t" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
+		cout << "\nHOUSES: \t" << classGameFieldVector->at(field).getAmoutOfHouses() << "\n\n";
 		cout << "RENT:\t" << classGameFieldVector->at(field).getRent();
 		cout << "\nMONEY:\t" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		cout << "[1] PAY\n";
 		cout << "Pay: ";
 		cin >> userInput;
+		if (userInput != 1) { goto purchasAbleFieldsBegin; }
 		cout << "\n";
 		cout << classPlayerVector->at(*thisPlayer).getPlayerName() << ":\n";
 		cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - ";
@@ -377,7 +427,8 @@ purchasAbleFieldsBegin:
 				goto purchasAbleFieldsBegin;
 			}
 			else {
-				if (classPlayerVector->at(*thisPlayer).checkforFullGroup(classGameFieldVector->at(field).getGroupPosition(), 2, 3) == true) {		/*Checking if the player posseses the full group.*/
+				/*Checking if the player posseses the full group.*/
+				if (classPlayerVector->at(*thisPlayer).checkforFullGroup(classGameFieldVector->at(field).getGroupPosition(), classGameFieldVector->at(field).getFieldType()) == true) {
 					cout << "\n";
 					cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - ";
 					cout << classGameFieldVector->at(field).getPricePerHouse();
@@ -390,6 +441,12 @@ purchasAbleFieldsBegin:
 					cout << "\nNEW RENT: " << classGameFieldVector->at(field).getRent() << "\n\n";
 					system("pause");
 				}
+				else if (classGameFieldVector->at(field).getFieldType() == "Port") {			/*Checking if the current field is a port.*/
+					system("cls");
+					cout << "You can't build on ports!\n\n";
+					system("pause");
+					goto purchasAbleFieldsBegin;
+				}
 				else {
 					system("cls");
 					cout << "You don't have all fields of this group!\n\n";
@@ -401,18 +458,23 @@ purchasAbleFieldsBegin:
 		else if (userInput == 2) {
 			system("cls");																	/*Displaying the info of the field.*/
 			cout << classGameFieldVector->at(field).getFieldName();
-			cout << "\nHOUSES:\t\t" << classGameFieldVector->at(field).getAmoutOfHouses();
-			cout << "\n\nRent:\t\t\tBase:\t\t" << classGameFieldVector->at(field).getRent();
-			cout << "\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getRent() * 2;
-			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getRent() * 2 * 2;
-			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getRent() * 2 * 2 * 2;
-			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getRent() * 2 * 2 * 2 * 2;
-			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getRent() * 2 * 2 * 2 * 2 * 2;
+			cout << "\n\nHOUSES:\t\t" << classGameFieldVector->at(field).getAmoutOfHouses();
+			cout << "\n\nRent:\t\t\tBase:\t\t" << classGameFieldVector->at(field).getBaseRent();
+			cout << "\n\t\t\tFull group:\t" << classGameFieldVector->at(field).getBaseRent();
+			cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
+			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2;
+			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2;
+			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2;
+			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2 * 2;
 			cout << "\n\n";
 			system("pause");
 			goto purchasAbleFieldsBegin;
 		}
 	}
+}
+
+void trade(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer, int* selectedPlayer) {
+	/*Used as a function to trade belogings between players.*/
 }
 
 int rollDice() {
