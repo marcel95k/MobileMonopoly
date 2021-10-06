@@ -45,6 +45,9 @@ void  setFieldStats(int buyingPriceValue, int pricePerHouseValue, int baseRentVa
 void  increaseRent(int value) {			/*Multiplies the value of rent by the handed over value.*/
 	rent = rent * value;
 }
+void setRent(int value) {			/*Sets the rent to the handed over value.*/
+	rent = value;
+}
 void  increaseAmountOfHouses(int value) {
 	amountOfHouses += value;
 }
