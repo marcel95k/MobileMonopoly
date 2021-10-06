@@ -578,14 +578,12 @@ int rollDice() {
 	int dice_1;						/*and then added together to a new*/
 	int dice_2;						/*variable which represents*/
 	int diceSum;					/*the sum of both dices.*/
-	int in;
-	cin >> in;
 	srand(time(NULL));
-	//this_thread::sleep_for(chrono::seconds(1));
+	this_thread::sleep_for(chrono::seconds(1));
 	dice_1 = rand() % 6 + 1;
-	//this_thread::sleep_for(chrono::seconds(1));
+	this_thread::sleep_for(chrono::seconds(1));
 	dice_2 = rand() % 6 + 1;
-	diceSum = in;// dice_1 + dice_2;
+	diceSum = dice_1 + dice_2;
 	system("cls");
 	cout << "You rolled " << dice_1 << " and " << dice_2 << " (" << diceSum << ")\n\n";
 	system("pause");
