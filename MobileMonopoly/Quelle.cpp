@@ -10,6 +10,7 @@
 #include "classPlayer.h"
 #include "classBank.h"
 #include "classGameField.h"
+#include "classTrade.h"
 
 using namespace std;
 
@@ -19,7 +20,6 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer);
 void purchasAbleFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer);
 void eventsAndCommunityFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer);
-void trade(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer, int* selectedPlayer);
 int rollDice();
 
 int main() {
@@ -196,11 +196,12 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 		cout << "[1] Roll Dice\n";
 		cout << "[2] TRADE\n";
 		cout << "[3] VIEW PLAYER INFO\n";
-		cout << "[4] RESIGN\n\n";
+		cout << "[4] VIEW FIELD INFO\n";
+		cout << "[5] RESIGN\n\n";
 		cout << "Option: ";
 		cin >> userInput;
 
-		if (userInput == 1) {
+		if (userInput == 1) {		/*ROLL DICE*/
 			classPlayerVector->at(thisPlayer).setNewPosition(rollDice());															/*Sets the new position of the player by calling the function rollDice().*/
 			if (classGameFieldVector->at(classPlayerVector->at(thisPlayer).getCurrentPosition()).getIsPurchasable() == false) {		/*Then it will be checked if the player landed on a purchasable field or not.*/
 				nonPurchasAbleFields(classGameFieldVector, classPlayerVector, &thisPlayer);
@@ -209,8 +210,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 				purchasAbleFields(classGameFieldVector, classPlayerVector, &thisPlayer);
 			}
 		}
-
-		else if (userInput == 2) {
+		else if (userInput == 2) {	/*TRADE*/
 		tradeSection:
 			int tradePartner;
 			system("cls");
@@ -232,11 +232,18 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 			}
 			else {
 				tradePartner = userInput - 1;
-				trade(classGameFieldVector, classPlayerVector, &thisPlayer, &tradePartner);
-			}
+				classTrade trade;
+				trade.trade(classGameFieldVector, classPlayerVector, &thisPlayer, &tradePartner);
+				if (trade.getTradeAbort() == false) {								
+					system("cls");														
+					cout << "Trade completed!\n\n";
+					system("pause");
+				}
+				else if (trade.getTradeAbort() == true) { goto gameRoundBegin; }	/*Check if the function getTradeAbort()*/
+																					/*returns TRUE and make the same player continue*/
+			}																		/*in this round.*/
 		}
-
-		else if (userInput == 3) {																									/****************************************/
+		else if (userInput == 3) {	/*VIEW PLAYER INFO*/																			/****************************************/
 			system("cls");																											/*Viewing the info of a selected player.*/
 			cout << "Of which player do you want to see the info?\n\n";																/*Currently viewing:					*/
 			for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {										/*				- Playername			*/
@@ -253,7 +260,53 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 			system("pause");
 			thisPlayer--;
 		}
-
+		else if (userInput == 4) {	/*VIEW FIELD INFO*/
+		displayFieldBegin:
+			int userInput;
+			system("cls");
+			for (int displayFields = 0; displayFields < classGameFieldVector->size(); displayFields++) {
+				cout << "[" << displayFields << "] " << classGameFieldVector->at(displayFields).getFieldName() << ": " << classGameFieldVector->at(displayFields).getBelongsTo() << "\n";
+			}
+			cout << "\nOf which field do you want to see the info?\tChoose: ";
+			cin >> userInput;
+			if (userInput > classGameFieldVector->size()) {
+				cout << "\nField not found!\n";
+				system("pause");
+				goto displayFieldBegin;
+			}
+			if (classGameFieldVector->at(userInput).getGroupPosition() != 0 && classGameFieldVector->at(userInput).getIsPurchasable() == true) {		/*Displaying the info of the field when it is a port.*/
+				system("cls");
+				cout << classGameFieldVector->at(userInput).getFieldName();
+				cout << "\n\nBELONGS TO: " << classGameFieldVector->at(userInput).getBelongsTo();
+				cout << "\n\nHOUSES:\t\t" << classGameFieldVector->at(userInput).getAmoutOfHouses();
+				cout << "\n\nRent:\t\t\tBase:\t\t" << classGameFieldVector->at(userInput).getBaseRent();
+				cout << "\n\t\t\tFull group:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2;
+				cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3;
+				cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3 * 2;
+				cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3 * 2 * 2;
+				cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3 * 2 * 2 * 2;
+				cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3 * 2 * 2 * 2 * 2;
+				cout << "\n\n";
+				system("pause");
+			}
+			else if (classGameFieldVector->at(userInput).getGroupPosition() == 0 && classGameFieldVector->at(userInput).getIsPurchasable() == true) {	/*Displaying the info of the field when it is a port.*/
+				system("cls");
+				cout << classGameFieldVector->at(userInput).getFieldName();
+				cout << "\n\nRent:\t\t\t1 Port:\t\t" << classGameFieldVector->at(userInput).getBaseRent();
+				cout << "\n\t\t\t2 Ports:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2;
+				cout << "\n\t\t\t3 Ports:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2 * 2;
+				cout << "\n\t\t\t4 Ports:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2 * 2 * 2;
+				cout << "\n\n";
+				system("pause");
+			}
+			else if (classGameFieldVector->at(userInput).getIsPurchasable() == false) {																	/*Displaying teh info of the field when it is a nonpurchasable field.*/
+				system("cls");
+				cout << classGameFieldVector->at(userInput).getFieldName();
+				cout << "\n\n";
+				system("pause");
+			}
+			goto gameRoundBegin;
+		}
 		else { goto gameRoundBegin; }
 
 
@@ -263,10 +316,10 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 	}
 }
 
-void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer) {		/*Event fields:*/
-	int field = classPlayerVector->at(*thisPlayer).getCurrentPosition();														/*The string of the event fields in checked*/
-	system("cls");																												/*and make happen the event based on the name*/
-	if (classGameFieldVector->at(field).getFieldName() == "START") {															/*of the event field.*/
+void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer) {		/*Nonpurchasable fields:*/
+	int field = classPlayerVector->at(*thisPlayer).getCurrentPosition();																	/*The string of the nonpurchasable fields is checked*/
+	system("cls");																															/*and make happen the event based on the name*/
+	if (classGameFieldVector->at(field).getFieldName() == "START") {																		/*of the field.*/
 		cout << "YOU LANDED EXACTLY ON START AND GOT 4000!\n\n";
 		system("pause");
 		cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[32m + 4000\033[0m";
@@ -340,6 +393,7 @@ purchasAbleFieldsBegin:
 				cout << "You don't have enough money to purchase this field!\n\n";
 				goto purchasAbleFieldsBegin;
 			}
+			
 			cout << "\n";
 			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - ";
 			cout << classGameFieldVector->at(field).getPrice();
@@ -352,6 +406,14 @@ purchasAbleFieldsBegin:
 			classPlayerVector->at(*thisPlayer).addMyField(field);													/*Number of the field is pushed to the vector myField of classPlayer.*/
 			classPlayerVector->at(*thisPlayer).addToMyGroupStrings(classGameFieldVector->at(field).getFieldName(), classGameFieldVector->at(field).getGroupPosition());
 			classPlayerVector->at(*thisPlayer).addToMyGroup(1, classGameFieldVector->at(field).getGroupPosition());
+			for (int x = 0; x < classGameFieldVector->size(); x++) {												/*Checking if the player posseses the full group and double the rent.*/
+				if (classPlayerVector->at(*thisPlayer).checkforFullGroup(classGameFieldVector->at(x).getGroupPosition(), classGameFieldVector->at(x).getFieldType()) == true) {
+					classGameFieldVector->at(x).increaseRent(2);
+				}
+				else {
+					classGameFieldVector->at(x).setRent(classGameFieldVector->at(x).getBaseRent());
+				}
+			}
 			cout << "\n\n";
 			system("pause");
 		}
@@ -442,7 +504,7 @@ purchasAbleFieldsBegin:
 					classPlayerVector->at(*thisPlayer).losePlayerMoney(classGameFieldVector->at(field).getPricePerHouse());
 					cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n";
 					classGameFieldVector->at(field).increaseAmountOfHouses(1);
-					classGameFieldVector->at(field).increaseRent(2);
+					classGameFieldVector->at(field).increaseRent(3);
 					cout << "\nHOUSES\x1B[32m + 1\033[0m: " << classGameFieldVector->at(field).getAmoutOfHouses() << " now\n\n";
 					cout << "\nNEW RENT: " << classGameFieldVector->at(field).getRent() << "\n\n";
 					system("pause");
@@ -510,22 +572,20 @@ void eventsAndCommunityFields(vector <classGameField>* classGameFieldVector, vec
 	}
 }
 
-void trade(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer, int* selectedPlayer) {
-	/*Used as a function to trade belogings between players.*/
-}
-
 int rollDice() {
 	system("cls");
 	cout << "Rolling Dices...\n";	/*Two variables are calculated randomly*/
 	int dice_1;						/*and then added together to a new*/
 	int dice_2;						/*variable which represents*/
 	int diceSum;					/*the sum of both dices.*/
+	int in;
+	cin >> in;
 	srand(time(NULL));
-	this_thread::sleep_for(chrono::seconds(1));
+	//this_thread::sleep_for(chrono::seconds(1));
 	dice_1 = rand() % 6 + 1;
-	this_thread::sleep_for(chrono::seconds(1));
+	//this_thread::sleep_for(chrono::seconds(1));
 	dice_2 = rand() % 6 + 1;
-	diceSum = dice_1 + dice_2;
+	diceSum = in;// dice_1 + dice_2;
 	system("cls");
 	cout << "You rolled " << dice_1 << " and " << dice_2 << " (" << diceSum << ")\n\n";
 	system("pause");
