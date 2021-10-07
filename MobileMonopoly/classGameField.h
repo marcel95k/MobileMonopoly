@@ -11,9 +11,11 @@ class classGameField {
 private:
 	string fieldName;							/*Used as the name of the field during the entire program.*/
 	string belongsTo;							/*Tells to which player the field belongs.*/
+	string fieldType;							/*Tells the type of the fields, whether it is a 2-Group field, 3-Group field or a port.*/
 	int belongingNumber;						/*Represents the position of the vector of the players.*/
 	int price;									/*Used as the current price of the field.*/
 	int pricePerHouse;							/*Used as the price for a house of the field.*/
+	int baseRent;								/*Used as the base rent of the field.*/
 	int rent;									/*Used as the current rent of the field.*/
 	int groupPosition;
 	int amountOfHouses = 0;						/*Represents the amount of houses on the field.*/
