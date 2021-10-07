@@ -176,12 +176,11 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 		}
 		if (classPlayerVector->at(thisPlayer).getIsInJail() == true) {	/*Check if the current player is in jail*/
 			cout << "You are in jail!\nPay 500!\n\n";					/*and let the player pay.*/
-			system("pause");											/*Afterwards the player is put on the VISIT field.*/
+			system("pause");											
 			cout << "\n";
 			cout << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\x1B[31m - 100\033[0m\n";
 			classPlayerVector->at(thisPlayer).losePlayerMoney(500);
 			cout << "NEW MONEY: " << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\n\n";
-			classPlayerVector->at(thisPlayer).goBackOnField(20);
 			classPlayerVector->at(thisPlayer).setIsInJail(false);
 			system("pause");
 			system("cls");
@@ -189,7 +188,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 		for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {
 			cout << displayPlayers.at(listPlayers) << ": " << classGameFieldVector->at(classPlayerVector->at(listPlayers).getCurrentPosition()).getFieldName() << "\n";
 		}
-		cout << "\n\n\n\n";
+		cout << "\n\n\n";
 		cout << "NAME:\t" << classPlayerVector->at(thisPlayer).getPlayerName() << "\n";
 		cout << "MONEY:\t" << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\n";
 		cout << "CURRENT FIELD:\t" << classGameFieldVector->at(classPlayerVector->at(thisPlayer).getCurrentPosition()).getFieldName() << "\n\n";
@@ -253,7 +252,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 			for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {
 				cout << "[" << listPlayers + 1 << "] " << classPlayerVector->at(listPlayers).getPlayerName() << "\n";
 			}
-			cout << "["
+			cout << "[";
 			cout << "\nChoose: ";
 			cin >> otherPlayer;
 			if (otherPlayer == thisPlayer + 1) {
@@ -331,11 +330,11 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 				cout << "\n\nHOUSES:\t\t" << classGameFieldVector->at(userInput).getAmoutOfHouses();
 				cout << "\n\nRent:\t\t\tBase:\t\t" << classGameFieldVector->at(userInput).getBaseRent();
 				cout << "\n\t\t\tFull group:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2;
-				cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3;
-				cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3 * 2;
-				cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3 * 2 * 2;
-				cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3 * 2 * 2 * 2;
-				cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3 * 2 * 2 * 2 * 2;
+				cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2 * 2;
+				cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2 * 2 * 2;
+				cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2 * 2 * 2 * 2;
+				cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2 * 2 * 2 * 2 * 2;
+				cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2 * 2 * 2 * 2 * 2 * 2;
 				cout << "\n\n";
 				system("pause");
 			}
@@ -411,6 +410,7 @@ void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector 
 	else if (classGameFieldVector->at(field).getFieldName() == "JAIL") {
 		cout << "YOU HAVE TO GO TO JAIL!\n\n";
 		classPlayerVector->at(*thisPlayer).setIsInJail(true);
+		classPlayerVector->at(*thisPlayer).goBackOnField(20);				/*The player is put on the VISIT field.*/
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "ADDITIONAL TAX") {
 		cout << "YOU NEED TO PAY 1000 INCOME TAX!\n\n";
@@ -473,11 +473,11 @@ purchasAbleFieldsBegin:
 			cout << "\n\nPrice Per House:\t" << classGameFieldVector->at(field).getPricePerHouse();
 			cout << "\n\nRent:\t\t\tBase:\t\t" << classGameFieldVector->at(field).getBaseRent();
 			cout << "\n\t\t\tFull group:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
-			cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getBaseRent() * 3;
-			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2;
-			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2;
-			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2 * 2;
-			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2 * 2 * 2;
+			cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2;
+			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2;
+			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2;
+			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2 * 2;
+			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2 * 2 * 2;
 			cout << "\n\n";
 			system("pause");
 			goto purchasAbleFieldsBegin;
@@ -554,7 +554,7 @@ purchasAbleFieldsBegin:
 					classPlayerVector->at(*thisPlayer).losePlayerMoney(classGameFieldVector->at(field).getPricePerHouse());
 					cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n";
 					classGameFieldVector->at(field).increaseAmountOfHouses(1);
-					classGameFieldVector->at(field).increaseRent(3);
+					classGameFieldVector->at(field).increaseRent(2);
 					cout << "\nHOUSES\x1B[32m + 1\033[0m: " << classGameFieldVector->at(field).getAmoutOfHouses() << " now\n\n";
 					cout << "\nNEW RENT: " << classGameFieldVector->at(field).getRent() << "\n\n";
 					system("pause");
@@ -579,11 +579,11 @@ purchasAbleFieldsBegin:
 			cout << "\n\nHOUSES:\t\t" << classGameFieldVector->at(field).getAmoutOfHouses();
 			cout << "\n\nRent:\t\t\tBase:\t\t" << classGameFieldVector->at(field).getBaseRent();
 			cout << "\n\t\t\tFull group:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
-			cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getBaseRent() * 3;
-			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2;
-			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2;
-			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2 * 2;
-			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getBaseRent() * 3 * 2 * 2 * 2 * 2;
+			cout << "\n\n\t\t\tWith 1 House:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
+			cout << "\n\t\t\tWith 2 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2;
+			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2;
+			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2 * 2;
+			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getBaseRent() * 2 * 2 * 2 * 2 * 2 * 2;
 			cout << "\n\n";
 			system("pause");
 			goto purchasAbleFieldsBegin;
@@ -631,7 +631,7 @@ int rollDice() {
 	srand(time(NULL));
 	this_thread::sleep_for(chrono::seconds(1));
 	dice_1 = rand() % 6 + 1;
-	this_thread::sleep_for(chrono::seconds(1));
+	//this_thread::sleep_for(chrono::seconds(1));
 	dice_2 = rand() % 6 + 1;
 	diceSum = dice_1 + dice_2;
 	system("cls");
