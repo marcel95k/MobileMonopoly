@@ -631,7 +631,7 @@ int rollDice() {
 	srand(time(NULL));
 	this_thread::sleep_for(chrono::seconds(1));
 	dice_1 = rand() % 6 + 1;
-	//this_thread::sleep_for(chrono::seconds(1));
+	this_thread::sleep_for(chrono::seconds(1));
 	dice_2 = rand() % 6 + 1;
 	diceSum = dice_1 + dice_2;
 	system("cls");
