@@ -195,9 +195,10 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 		cout << "CURRENT FIELD:\t" << classGameFieldVector->at(classPlayerVector->at(thisPlayer).getCurrentPosition()).getFieldName() << "\n\n";
 		cout << "[1] Roll Dice\n";
 		cout << "[2] TRADE\n";
-		cout << "[3] VIEW PLAYER INFO\n";
-		cout << "[4] VIEW FIELD INFO\n";
-		cout << "[5] RESIGN\n\n";
+		cout << "[3] TRANSFER MONEY\n";
+		cout << "[4] VIEW PLAYER INFO\n";
+		cout << "[5] VIEW FIELD INFO\n";
+		cout << "[6] RESIGN\n\n";
 		cout << "Option: ";
 		cin >> userInput;
 
@@ -243,7 +244,56 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 																					/*returns TRUE and make the same player continue*/
 			}																		/*in this round.*/
 		}
-		else if (userInput == 3) {	/*VIEW PLAYER INFO*/																			/****************************************/
+		else if (userInput == 3) {	/*TRANSFER MONEY*/
+		transferSection:
+			int transferAmount;
+			int otherPlayer;
+			system("cls");
+			cout << "To whom do you want to transfer money?\n\n";
+			for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {
+				cout << "[" << listPlayers + 1 << "] " << classPlayerVector->at(listPlayers).getPlayerName() << "\n";
+			}
+			cout << "["
+			cout << "\nChoose: ";
+			cin >> otherPlayer;
+			if (otherPlayer == thisPlayer + 1) {
+				cout << "You can't transfer money to yourself!\n\n";
+				system("pause");
+				goto transferSection;
+			}
+			else if (otherPlayer > classPlayerVector->size()) {
+				cout << "\nNo player found at this position!\n";
+				system("pause");
+				goto transferSection;
+			}
+			else {
+				otherPlayer -= 1;
+				system("cls");
+				cout << "How much do you want to transfer?\n\n";
+				cout << "Amount: ";
+				cin >> transferAmount;
+				if (transferAmount >= classPlayerVector->at(thisPlayer).getPlayerMoney()) {
+					cout << "You do not have this many financial possibilities!\n";
+					system("pause");
+					goto transferSection;
+				}
+				else {
+					cout << classPlayerVector->at(thisPlayer).getPlayerName() << ":\n";
+					cout << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\x1B[31m - " << transferAmount << "\033[0m\n";
+					classPlayerVector->at(thisPlayer).losePlayerMoney(transferAmount);								
+					cout << "NEW MONEY: " << classPlayerVector->at(thisPlayer).getPlayerMoney();
+					cout << "\n\n";
+					cout << classPlayerVector->at(otherPlayer).getPlayerName() << ":\n";
+					cout << classPlayerVector->at(otherPlayer).getPlayerMoney() << "\x1B[32m + " << transferAmount << "\033[0m\n";
+					classPlayerVector->at(otherPlayer).addPlayerMoney(transferAmount);
+					cout << "NEW MONEY: " << classPlayerVector->at(otherPlayer).getPlayerMoney();
+					cout << "\n\n";
+					system("pause");
+					goto gameRoundBegin;
+				}
+			}
+		}
+		else if (userInput == 4) {	/*VIEW PLAYER INFO*/																			/****************************************/
 			system("cls");																											/*Viewing the info of a selected player.*/
 			cout << "Of which player do you want to see the info?\n\n";																/*Currently viewing:					*/
 			for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {										/*				- Playername			*/
@@ -260,7 +310,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 			system("pause");
 			thisPlayer--;
 		}
-		else if (userInput == 4) {	/*VIEW FIELD INFO*/
+		else if (userInput == 5) {	/*VIEW FIELD INFO*/
 		displayFieldBegin:
 			int userInput;
 			system("cls");
