@@ -109,6 +109,8 @@ void setUpGameField(vector <string>* gameFieldStringsValue) {
 void setUpPlayerStats(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector) {
 setUpPlayerStatsBegin:
 	int inputPlayerAmount;
+	int moneyAmount;
+	int userInput;
 	string name;
 	system("cls");
 	cout << "MONOPOLY\n\n";
@@ -125,7 +127,21 @@ setUpPlayerStatsBegin:
 		goto setUpPlayerStatsBegin;
 	}
 	cout << "\n";
-
+	system("cls");							/*Decide whether the players start with the default amount of money (15000)*/
+	cout << "Money:\n\n";					/*or a custom amount.*/
+	cout << "[1] Default";
+	cout << "\n[2] Custom";
+	cout << "\n\nOption: ";
+	cin >> userInput;
+	if (userInput == 1) {
+		moneyAmount = 15000;
+	}
+	else {
+		system("cls");
+		cout << "How much money is each player going to have?";
+		cout << "\n\nAmount: ";
+		cin >> moneyAmount;
+	}
 	/*Players entering their names within a for-loop.
 	 A second for-loop checks the availability of the typed in name.
 	 After entering the names, an object of classPlayer is created,
@@ -145,7 +161,7 @@ setUpPlayerStatsBegin:
 				goto typeInNames;
 			}
 		}
-		classPlayer playerObj(name, 15000);						/*15000 is the amount of money for each player (hardcoded for now).*/
+		classPlayer playerObj(name, moneyAmount);				/*15000 is the default amount of money for each player.*/
 		classPlayerVector->push_back(playerObj);				/*The new created playerObj is pushed to the vector playerVector.*/
 	}
 
@@ -391,6 +407,7 @@ void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector 
 	else if (classGameFieldVector->at(field).getFieldName() == "EVENT FIELD") {
 		cout << "YOU LANDED ON AN EVENT FIELD!\n\n";
 		system("pause");
+		eventsAndCommunityFields(classGameFieldVector, classPlayerVector, thisPlayer);
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "VISIT/JAIL") {
 		cout << "You are at VISIT/JAIL!\n\n";
@@ -536,7 +553,8 @@ purchasAbleFieldsBegin:
 		cout << "\nMONEY:\t" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		cout << "[1] BUY HOUSE/HOTEL\n";
 		cout << "[2] INFO\n";
-		cout << "[3] CONTINUE\n";
+		cout << "[3] CONTINUE";
+		cout << "\n\nOption: ";
 		cin >> userInput;
 		if (userInput == 1) {
 			if (classGameFieldVector->at(field).getAmoutOfHouses() == 5) {					/*Checking if all houses are already built*/
@@ -559,18 +577,24 @@ purchasAbleFieldsBegin:
 					classGameFieldVector->at(field).increaseAmountOfHouses(1);	
 					if (classGameFieldVector->at(field).getAmoutOfHouses() == 1) {
 						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 4);				/*The rent will be increased,*/
-					}																												/*based on how many houses*/
-					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 2) {												/*are already built on the field.*/
-						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 12);
-					}
-					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 3) {
-						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 24);
-					}
-					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 4) {
-						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 36);
-					}
+						classPlayerVector->at(*thisPlayer).addHouses(1);															/*based on how many houses*/
+					}																												/*are already built on the field.*/
+					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 2) {												/*Additionally the amount of */
+						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 12);			/*playerHouses in classPlayer will be*/
+						classPlayerVector->at(*thisPlayer).addHouses(1);															/*increased for each built house.*/
+					}																												/*If a hotel was built, 4 houses */
+					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 3) {												/*will be subtracted from playerHouses*/
+						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 24);			/*and the amount of playerHotels*/
+						classPlayerVector->at(*thisPlayer).addHouses(1);															/*in classPlayer will be increased.*/
+					}																												
+					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 4) {												
+						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 36);			
+						classPlayerVector->at(*thisPlayer).addHouses(1);
+					}																												
 					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 5) {
 						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 48);
+						classPlayerVector->at(*thisPlayer).removeHouses(4);
+						classPlayerVector->at(*thisPlayer).addHotels(1);
 					}
 					cout << "\nHOUSES\x1B[32m + 1\033[0m: " << classGameFieldVector->at(field).getAmoutOfHouses() << " now\n\n";
 					cout << "\nNEW RENT: " << classGameFieldVector->at(field).getRent() << "\n\n";
@@ -601,7 +625,7 @@ purchasAbleFieldsBegin:
 			cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 24;
 			cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(field).getBaseRent() * 36;
 			cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(field).getBaseRent() * 48;
-			cout << "\n\nCurret Rent:" << classGameFieldVector->at(field).getRent();
+			cout << "\n\nCurret Rent: " << classGameFieldVector->at(field).getRent();
 			cout << "\n\n";
 			system("pause");
 			goto purchasAbleFieldsBegin;
@@ -623,19 +647,79 @@ purchasAbleFieldsBegin:
 void eventsAndCommunityFields(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer) {
 	srand(time(NULL));
 	int userInput;
-	int getRandomEvent = rand() % 20 + 1;
+	int getRandomEvent = rand() % 10 + 1;
 	system("cls");
-	if (getRandomEvent == 1) {
-		cout << "You got a ticket for speeding!\n";
+	if (getRandomEvent == 1 || getRandomEvent == 2) {	/*SPPEDING TICKET*/
+		cout << "You got a speeding ticket!\n\n";
 		cout << "Pay 150!\n\n";
 		cout << "[1] PAY\n";
 		cout << "Option: ";
 		cin >> userInput;
 		if (userInput == 1) {
-			classPlayerVector->at(*thisPlayer).losePlayerMoney(150);
 			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 150\033[0m\n";	
 			classPlayerVector->at(*thisPlayer).losePlayerMoney(150);
-			cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney();
+			cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
+		}
+	}
+	if (getRandomEvent == 3 || getRandomEvent == 4) {	/*RENOVATE*/
+		int priceForHouses = classPlayerVector->at(*thisPlayer).getPlayerHouses() * 250;
+		int priceForHotels = classPlayerVector->at(*thisPlayer).getPlayerHotels() * 1000;
+		int totalAmount = priceForHouses + priceForHotels;
+		
+		cout << "Your buildings are being renovated!\n\n";
+		cout << "Pay 250 per house and 1000 per hotel!\n";
+		cout << "You have to pay a total amount of " << totalAmount << "!\n\n";
+		cout << "[1] PAY\n";
+		cout << "Option: ";
+		cin >> userInput;
+		if (userInput == 1) {
+			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - " << totalAmount;
+			cout << "\033[0m\n";
+			classPlayerVector->at(*thisPlayer).losePlayerMoney(totalAmount);
+			cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
+		}
+	}
+	if (getRandomEvent == 5 || getRandomEvent == 6) {	/*MOVE TO COPENHAGEN*/
+		cout << "Move to \x1B[35mCOPENHAGEN\033[0m!\n\n";
+		cout << "Take 2000 if you pass START!\n\n";
+		cout << "[1] MOVE\n";
+		cout << "Option: ";
+		cin >> userInput;
+		if (userInput == 1) {
+			for (int x = 0; x < 40; x++) {
+				classPlayerVector->at(*thisPlayer).setNewPosition(1);
+				if (classPlayerVector->at(*thisPlayer).getCurrentPosition() == 0) {
+					cout << "\nYou passed START and got 2000!\n\n";
+					classPlayerVector->at(*thisPlayer).addPlayerMoney(2000);
+				}
+				if (classPlayerVector->at(*thisPlayer).getCurrentPosition() == 11) {
+					break;
+				}
+			}
+		}
+	}
+	if (getRandomEvent == 7 || getRandomEvent == 8) {	/*FRIEND'S BIRTHDAY*/
+		cout << "You have to pay for your friend's birthday!\n\n";
+		cout << "Pay 500!\n\n";
+		cout << "[1] PAY\n";
+		cout << "Option: ";
+		cin >> userInput;
+		if (userInput == 1) {
+			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 500\033[0m\n";
+			classPlayerVector->at(*thisPlayer).losePlayerMoney(500);
+			cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
+		}
+	}
+	if (getRandomEvent == 9 || getRandomEvent == 10) {	/*COMPANY INTERNATIONAL SUCCESS*/
+		cout << "Your company is an international success!\n\n";
+		cout << "You get 1000!\n\n";
+		cout << "[1] GET\n";
+		cout << "Option: ";
+		cin >> userInput;
+		if (userInput == 1) {
+			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[32m + 1000\033[0m\n";
+			classPlayerVector->at(*thisPlayer).addPlayerMoney(1000);
+			cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		}
 	}
 }
