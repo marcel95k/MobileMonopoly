@@ -335,7 +335,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 			}
 			cout << "\nOf which field do you want to see the info?\tChoose: ";
 			cin >> userInput;
-			if (userInput > classGameFieldVector->size()) {
+			if (userInput >= classGameFieldVector->size()) {
 				cout << "\nField not found!\n";
 				system("pause");
 				goto displayFieldBegin;
@@ -352,6 +352,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 				cout << "\n\t\t\tWith 3 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 24;
 				cout << "\n\t\t\tWith 4 Houses:\t" << classGameFieldVector->at(userInput).getBaseRent() * 36;
 				cout << "\n\t\t\tWith HOTEL:\t" << classGameFieldVector->at(userInput).getBaseRent() * 48;
+				cout << "\n\nCurret Rent: " << classGameFieldVector->at(userInput).getRent();
 				cout << "\n\n";
 				system("pause");
 			}
@@ -365,7 +366,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 				cout << "\n\n";
 				system("pause");
 			}
-			else if (classGameFieldVector->at(userInput).getIsPurchasable() == false) {																	/*Displaying teh info of the field when it is a nonpurchasable field.*/
+			else if (classGameFieldVector->at(userInput).getIsPurchasable() == false) {																	/*Displaying the info of the field when it is a nonpurchasable field.*/
 				system("cls");
 				cout << classGameFieldVector->at(userInput).getFieldName();
 				cout << "\n\n";
@@ -648,24 +649,27 @@ void eventsAndCommunityFields(vector <classGameField>* classGameFieldVector, vec
 	srand(time(NULL));
 	int userInput;
 	int getRandomEvent = rand() % 10 + 1;
-	system("cls");
 	if (getRandomEvent == 1 || getRandomEvent == 2) {	/*SPPEDING TICKET*/
+event_1:
+		system("cls");
 		cout << "You got a speeding ticket!\n\n";
 		cout << "Pay 150!\n\n";
 		cout << "[1] PAY\n";
 		cout << "Option: ";
 		cin >> userInput;
 		if (userInput == 1) {
-			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 150\033[0m\n";	
+			cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 150\033[0m\n";	
 			classPlayerVector->at(*thisPlayer).losePlayerMoney(150);
-			cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
+			cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		}
+		else { goto event_1; }
 	}
 	if (getRandomEvent == 3 || getRandomEvent == 4) {	/*RENOVATE*/
+event_2:
 		int priceForHouses = classPlayerVector->at(*thisPlayer).getPlayerHouses() * 250;
 		int priceForHotels = classPlayerVector->at(*thisPlayer).getPlayerHotels() * 1000;
 		int totalAmount = priceForHouses + priceForHotels;
-		
+		system("cls");
 		cout << "Your buildings are being renovated!\n\n";
 		cout << "Pay 250 per house and 1000 per hotel!\n";
 		cout << "You have to pay a total amount of " << totalAmount << "!\n\n";
@@ -673,13 +677,16 @@ void eventsAndCommunityFields(vector <classGameField>* classGameFieldVector, vec
 		cout << "Option: ";
 		cin >> userInput;
 		if (userInput == 1) {
-			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - " << totalAmount;
+			cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - " << totalAmount;
 			cout << "\033[0m\n";
 			classPlayerVector->at(*thisPlayer).losePlayerMoney(totalAmount);
-			cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
+			cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		}
+		else { goto event_2; }
 	}
 	if (getRandomEvent == 5 || getRandomEvent == 6) {	/*MOVE TO COPENHAGEN*/
+event_3:
+		system("cls");
 		cout << "Move to \x1B[35mCOPENHAGEN\033[0m!\n\n";
 		cout << "Take 2000 if you pass START!\n\n";
 		cout << "[1] MOVE\n";
@@ -697,30 +704,50 @@ void eventsAndCommunityFields(vector <classGameField>* classGameFieldVector, vec
 				}
 			}
 		}
+		else { goto event_3; }
 	}
 	if (getRandomEvent == 7 || getRandomEvent == 8) {	/*FRIEND'S BIRTHDAY*/
+event_4:
+		system("cls");
 		cout << "You have to pay for your friend's birthday!\n\n";
 		cout << "Pay 500!\n\n";
 		cout << "[1] PAY\n";
 		cout << "Option: ";
 		cin >> userInput;
 		if (userInput == 1) {
-			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 500\033[0m\n";
+			cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 500\033[0m\n";
 			classPlayerVector->at(*thisPlayer).losePlayerMoney(500);
-			cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
+			cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		}
+		else { goto event_4; }
 	}
 	if (getRandomEvent == 9 || getRandomEvent == 10) {	/*COMPANY INTERNATIONAL SUCCESS*/
+event_5:
+		system("cls");
 		cout << "Your company is an international success!\n\n";
 		cout << "You get 1000!\n\n";
 		cout << "[1] GET\n";
 		cout << "Option: ";
 		cin >> userInput;
 		if (userInput == 1) {
-			cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[32m + 1000\033[0m\n";
+			cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[32m + 1000\033[0m\n";
 			classPlayerVector->at(*thisPlayer).addPlayerMoney(1000);
-			cout << "\nNEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
+			cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		}
+		else { goto event_5; }
+	}
+	if (getRandomEvent == 11 || getRandomEvent == 12) {	/*GO BACK 3 FIELDS*/
+event_6:
+		system("cls");
+		cout << "Go back 3 fields!\n\n";
+		cout << "[1] GO\n";
+		cout << "Option: ";
+		cin >> userInput;
+		if (userInput == 1) {
+			classPlayerVector->at(*thisPlayer).goBackOnField(3);
+			cout << "You went back 3 fields!\n\n";
+		}
+		else { goto event_6; }
 	}
 }
 
