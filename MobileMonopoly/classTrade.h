@@ -11,12 +11,12 @@ using namespace std;
 
 class classTrade {
 private:
-	bool tradeAbort = false;		/*Used to determin whether the trade was aborted or not.*/
+	bool tradeAbort = false;		/*Used to determine whether the trade was aborted or not.*/
 public:
 	void trade(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector, int* thisPlayer, int* selectedPlayer) {
 	tradeBegin:
 		setTradeAbort(false);
-		/*Used as a function to trade belogings between players.*/
+		/*Used as a function to trade belongings between players.*/
 		string offered_field_player1;
 		int choose;
 		int accept;
@@ -96,12 +96,18 @@ public:
 						}
 					}
 				}
-				else if (choose == 2) {	/*Trade aborted*/
+				if (choose == 2) {	/*Trade aborted*/
+					system("cls");
+					cout << "Trade canceled!\n\n";
+					system("pause");
 					setTradeAbort(true);
 				}
 			}
 		}
-		else if (choose == 2) {	/*Trade aborted*/
+		if (choose == 2) {	/*Trade aborted*/
+			system("cls");
+			cout << "Trade canceled!\n\n";
+			system("pause");
 			setTradeAbort(true);
 		}
 
