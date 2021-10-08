@@ -12,10 +12,12 @@ private:
 	int playerMoney;				/*Used as the money for each player during the entire progam.*/
 	int amountOfMyFields = 0;		/*Tells how many fields each player possesses.*/
 	int currentPosition = 0;		/*Tells the current position of a player on the gamefield.*/
-	vector<string>myGroupStrings[9];
-	vector<int>myGroup[9];
+	int playerHouses = 0;			/*Tells how many HOUSES each player possesses.*/
+	int playerHotels = 0;			/*Tells how many HOTELS each player possesses.*/
+	vector<string>myGroupStrings[9];/*Used to display the bought fields by a user.*/
+	vector<int>myGroup[9];			/*Used as to determine if a player has a full group to build a house.*/
 	vector <int> myField[40];		/*Tells the number of the field belonging to the player.*/
-	bool isGroup = false;
+	//bool isGroup = false;			/*Originally sed to determine if a player possesses a full group.*/
 	bool isMyField = false;			/*Checks if the current field, a player is standing on belongs to the player.*/
 	bool IsInJail = false;			/*Checks if the a player is in jail at the moment.*/
 	bool isLendingMoney = false;	/*Checks if the a player is currently lending money for the bank.*/
@@ -64,6 +66,18 @@ void setNewPosition(int value) {		/*Sets the new position of the player on the g
 	}
 	else currentPosition += value;
 }
+void addHouses(int value) {
+	playerHouses += value;
+}
+void removeHouses(int value) {
+	playerHouses -= value;
+}
+void addHotels(int value) {
+	playerHotels += value;
+}
+void removeHotels(int value) {
+	playerHotels -= value;
+}
 void addToMyGroupStrings(string fieldName, int value) {		/*Change the string of myGroupStrings to the handed over value at the handed over position.*/
 	myGroupStrings->at(value) = myGroupStrings->at(value) + fieldName + ", ";
 }
@@ -89,7 +103,7 @@ void addMyField(int value) {									/*Pushes the handed over value to the vecto
 void setIsMyField(bool value) {								/*Switches isMyField between true and false, depending on the handed over value.*/
 	isMyField = value;
 }
-void classPlayer::setIsInJail(bool value) {									/*Switches IsInJail between true and false, depending on the handed over value.*/
+void setIsInJail(bool value) {									/*Switches IsInJail between true and false, depending on the handed over value.*/
 	IsInJail = value;
 }
 
@@ -98,6 +112,8 @@ void classPlayer::setIsInJail(bool value) {									/*Switches IsInJail between 
 string getPlayerName() { return playerName; }
 int getPlayerMoney() { return playerMoney; }
 int getAmountOfMyFields() { return amountOfMyFields; }
+int getPlayerHouses() { return playerHouses; }
+int getPlayerHotels() { return playerHotels; }
 int getCurrentPosition() { return currentPosition; }
 void getMyGroupStrings() {
 	cout << "\n";
