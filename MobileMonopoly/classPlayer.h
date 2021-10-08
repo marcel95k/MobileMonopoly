@@ -89,7 +89,7 @@ void addMyField(int value) {									/*Pushes the handed over value to the vecto
 void setIsMyField(bool value) {								/*Switches isMyField between true and false, depending on the handed over value.*/
 	isMyField = value;
 }
-void setIsInJail(bool value) {									/*Switches IsInJail between true and false, depending on the handed over value.*/
+void classPlayer::setIsInJail(bool value) {									/*Switches IsInJail between true and false, depending on the handed over value.*/
 	IsInJail = value;
 }
 
