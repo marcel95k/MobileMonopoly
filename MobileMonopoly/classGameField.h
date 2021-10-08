@@ -30,13 +30,13 @@ public:
 
 /*Calling Set-Methods*/
 
-void classGameField::setBelongsTo(string value) {		/*Sets the value of belongsTo to the handed over value.*/
+void setBelongsTo(string value) {		/*Sets the value of belongsTo to the handed over value.*/
 	belongsTo = value;
 }
-void classGameField::setBelongingNumber(int value) {	/*Sets the value of belongingNumber to the handed over value.*/
+void setBelongingNumber(int value) {	/*Sets the value of belongingNumber to the handed over value.*/
 	belongingNumber = value;
 }
-void classGameField::setFieldStats(int buyingPriceValue, int pricePerHouseValue, int baseRentValue, int rentValue, int groupValue, string fieldTypeValue) {				/*Sets the values of price, pricePerHouse, rent and groupPosition to the handed over values.*/
+void setFieldStats(int buyingPriceValue, int pricePerHouseValue, int baseRentValue, int rentValue, int groupValue, string fieldTypeValue) {				/*Sets the values of price, pricePerHouse, rent and groupPosition to the handed over values.*/
 	price = buyingPriceValue;
 	pricePerHouse = pricePerHouseValue;
 	baseRent = baseRentValue;
@@ -44,34 +44,34 @@ void classGameField::setFieldStats(int buyingPriceValue, int pricePerHouseValue,
 	groupPosition = groupValue;
 	fieldType = fieldTypeValue;
 }
-void classGameField::increaseRent(int value, int factor) {			/*Multiplies the value of baseRent by the handed over value. This new value represents the new rent*/
+void increaseRent(int value, int factor) {			/*Multiplies the value of baseRent by the handed over value. This new value represents the new rent*/
 	rent = value * factor;
 }
-void classGameField::setRent(int value) {				/*Sets the rent to the handed over value.*/
+void setRent(int value) {				/*Sets the rent to the handed over value.*/
 	rent = value;
 }
-void classGameField::increaseAmountOfHouses(int value) {
+void increaseAmountOfHouses(int value) {
 	amountOfHouses += value;
 }
-void classGameField::setIsAvailable(bool value) {		/*Sets the value of isAvailable to the handed over value.*/
+void setIsAvailable(bool value) {		/*Sets the value of isAvailable to the handed over value.*/
 	isAvailable = value;
 }
-void classGameField::setIsPurchasable(bool value) {		/*Sets the value of isPurchasable to the handed over value.*/
+void setIsPurchasable(bool value) {		/*Sets the value of isPurchasable to the handed over value.*/
 	isPurchasable = value;
 }
 
 /*Calling Get-Methods*/
 
-string classGameField::getFieldName() { return fieldName; }
-string classGameField::getBelongsTo() { return belongsTo; }
-string classGameField::getFieldType() { return fieldType; }
-int classGameField::getBelongingNumber() { return belongingNumber; }
-int classGameField::getPrice() { return price; }
-int classGameField::getPricePerHouse() { return pricePerHouse; }
-int classGameField::getBaseRent() { return baseRent; }
-int classGameField::getRent() { return rent; }
-int classGameField::getGroupPosition() { return groupPosition; }
-bool classGameField::getIsAvailable() { return isAvailable; }
-int classGameField::getAmoutOfHouses() { return amountOfHouses; }
-bool classGameField::getIsPurchasable() { return isPurchasable; }
+string getFieldName() { return fieldName; }
+string getBelongsTo() { return belongsTo; }
+string getFieldType() { return fieldType; }
+int getBelongingNumber() { return belongingNumber; }
+int getPrice() { return price; }
+int getPricePerHouse() { return pricePerHouse; }
+int getBaseRent() { return baseRent; }
+int getRent() { return rent; }
+int getGroupPosition() { return groupPosition; }
+bool getIsAvailable() { return isAvailable; }
+int getAmoutOfHouses() { return amountOfHouses; }
+bool getIsPurchasable() { return isPurchasable; }
 };
