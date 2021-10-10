@@ -455,6 +455,23 @@ playerInfoBegin:																													/*Viewing the info of a selected pl
 				goto gameRoundBegin;
 			}
 		}
+		else if (userInput == 7) {	/*RESIGN*/
+		int decision;
+			system("cls");
+			cout << "Are you sure?";
+			cout << "\n\n[1] Yes";
+			cout << "\n[2] No";
+			cout << "\n\nOption: ";
+			cin >> decision;
+			if (decision == 1) {
+				system("cls");
+				cout << classPlayerVector->at(thisPlayer).getPlayerName() << " raged and flipped the game board over the table!\n\n";
+				system("pause");
+				classPlayerVector->erase(classPlayerVector->begin() + thisPlayer);
+				thisPlayer--;
+			}
+			else { goto gameRoundBegin; }
+		}
 		else { goto gameRoundBegin; }
 
 		if (thisPlayer == classPlayerVector->size() - 1) {		/*Check if the iteration through the vector classPlayerVector*/
@@ -492,6 +509,12 @@ void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector 
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "VISIT/JAIL") {
 		cout << "You are at VISIT/JAIL!\n\n";
+		for (int x = 0; x < classPlayerVector->size(); x++) {
+			if (classPlayerVector->at(x).getIsInJail() == true) {
+				cout << "Say HI to " << classPlayerVector->at(x).getPlayerName() << "\n";
+			}
+		}
+		cout << "\n";
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "BANK") {
 		cout << "You are at the bank.\n\n";
@@ -531,7 +554,7 @@ void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector 
 		}
 	}
 	else if (classGameFieldVector->at(field).getFieldName() == "ADDITIONAL TAX") {
-		cout << "YOU NEED TO PAY 1000 INCOME TAX!\n\n";
+		cout << "YOU NEED TO PAY 1000 ADDITIONAL TAX!\n\n";
 		system("pause");
 		cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 1000\033[0m";
 		classPlayerVector->at(*thisPlayer).losePlayerMoney(1000);
@@ -870,7 +893,7 @@ event_7:
 		}
 		else { goto event_7; }
 	}
-	if (getRandomEvent == 15 || getRandomEvent == 16) {	/*GET FREE JAIL CARD*/
+	if (getRandomEvent == 15 || getRandomEvent == 16) {	/*GET 200 FROM EVERY PLAYER*/
 	event_8:
 		int getAmount = (classPlayerVector->size() - 1) * 200;
 		system("cls");
@@ -892,6 +915,27 @@ event_7:
 			cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		}
 		else { goto event_8; }
+	}
+	if (getRandomEvent == 17 || getRandomEvent == 18) {	/*GO TO START*/
+event_9:
+		system("cls");
+		cout << "Move forward to START!\n\n";
+		cout << "Draw 2000!\n\n";
+		cout << "[1] GO\n";
+		cout << "Option: ";
+		cin >> userInput;
+		if (userInput == 1) {
+			for (int x = 0; x < 40; x++) {
+				classPlayerVector->at(*thisPlayer).setNewPosition(1);
+				if (classPlayerVector->at(*thisPlayer).getCurrentPosition() == 0) {
+					cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[32m + 2000\033[0m\n";
+					classPlayerVector->at(*thisPlayer).addPlayerMoney(2000);
+					cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
+					break;
+				}
+			}
+		}
+		else { goto event_9; }
 	}
 }
 
@@ -998,4 +1042,3 @@ int rollDice() {					/*This function is planned to be only used when rolling the
 	system("pause");
 	return diceSum;
 }
-
