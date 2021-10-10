@@ -12,15 +12,16 @@ private:
 	string fieldName;							/*Used as the name of the field during the entire program.*/
 	string belongsTo;							/*Tells to which player the field belongs.*/
 	string fieldType;							/*Tells the type of the fields, whether it is a 2-Group field, 3-Group field or a port.*/
-	int belongingNumber;						/*Represents the position of the vector of the players.*/
+	int belongingNumber;						/*Represents the position in the vector of the players.*/
 	int price;									/*Used as the current price of the field.*/
 	int pricePerHouse;							/*Used as the price for a house of the field.*/
 	int baseRent;								/*Used as the base rent of the field.*/
 	int rent;									/*Used as the current rent of the field.*/
-	int groupPosition;
+	int groupPosition;							/*Represents the group number of the field.*/
 	int amountOfHouses = 0;						/*Represents the amount of houses on the field.*/
 	bool isAvailable = true;					/*Tells if the field is available to buy for a player.*/
-	bool isPurchasable = true;
+	bool isPurchasable = true;					/*Tells whether the field is purchasable or not.*/
+	bool rentWasDoubled = false;				/*Tells whether the rent of the field was doubled or not.*/
 public:
 	 classGameField(string fieldNameValue, int priceValue, bool availabilityValue) {			/*Constructor of classGameField.*/
 	fieldName = fieldNameValue;																			/*Hands over the value for fieldName, price and isAvailable.*/
@@ -53,11 +54,17 @@ void setRent(int value) {				/*Sets the rent to the handed over value.*/
 void increaseAmountOfHouses(int value) {
 	amountOfHouses += value;
 }
+void lowerAmountOfHouses(int value) {
+	amountOfHouses -= value;
+}
 void setIsAvailable(bool value) {		/*Sets the value of isAvailable to the handed over value.*/
 	isAvailable = value;
 }
 void setIsPurchasable(bool value) {		/*Sets the value of isPurchasable to the handed over value.*/
 	isPurchasable = value;
+}
+void setRentWasDoubled(bool value) {	/*Sets the value of rentWasDoubled to the handed over value.*/
+	rentWasDoubled = value;
 }
 
 /*Calling Get-Methods*/
@@ -74,4 +81,5 @@ int getGroupPosition() { return groupPosition; }
 bool getIsAvailable() { return isAvailable; }
 int getAmoutOfHouses() { return amountOfHouses; }
 bool getIsPurchasable() { return isPurchasable; }
+bool getRentWasDoubled() { return rentWasDoubled; }
 };
