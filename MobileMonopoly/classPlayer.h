@@ -21,6 +21,7 @@ private:
 	bool isMyField = false;			/*Checks if the current field, a player is standing on belongs to the player.*/
 	bool IsInJail = false;			/*Checks if the a player is in jail at the moment.*/
 	bool isLendingMoney = false;	/*Checks if the a player is currently lending money for the bank.*/
+	bool hasFreeJailCard = false;	/*Checks if the player posseses a free from jail card.*/
 public:
 
  classPlayer(string nameValue, int moneyValue) {			/*Constructor of classPlayer.*/
@@ -106,6 +107,9 @@ void setIsMyField(bool value) {								/*Switches isMyField between true and fal
 void setIsInJail(bool value) {									/*Switches IsInJail between true and false, depending on the handed over value.*/
 	IsInJail = value;
 }
+void setHasFreeJailCard(bool value) {							/*Switches hasFreeJailCard between true and false, depending on the handed over value.*/
+	hasFreeJailCard = value;
+}
 
 /*Calling Get-Methods*/
 
@@ -129,4 +133,5 @@ void getMyField() {
 bool getIsMyField() { return isMyField; }
 bool getIsInJail() { return IsInJail; }
 bool getIsLendingMoney() { return isLendingMoney; }
+bool getHasFreeJailCard() { return hasFreeJailCard; }
 };
