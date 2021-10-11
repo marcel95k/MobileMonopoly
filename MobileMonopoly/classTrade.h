@@ -72,25 +72,54 @@ public:
 						cout << "\n[2] Decline";
 						cout << "\n\nOption: ";
 						cin >> accept;
-						if(accept == 1){
-							classGameFieldVector->at(field_player_1).setBelongsTo(classPlayerVector->at(*selectedPlayer).getPlayerName());
-							classGameFieldVector->at(field_player_1).setBelongingNumber(*selectedPlayer);
-							classPlayerVector->at(*thisPlayer).removeFromMyGroupStrings(classGameFieldVector->at(field_player_1).getFieldName(), classGameFieldVector->at(field_player_1).getGroupPosition());
-							classPlayerVector->at(*thisPlayer).removeFromMyGroup(1, classGameFieldVector->at(field_player_1).getGroupPosition());
+						if(accept == 1){ 
+							if (classGameFieldVector->at(field_player_1).getFieldType() != "Port") {	/*Execute this section if the FIRST traded field is NOT a port.*/
+								classGameFieldVector->at(field_player_1).setBelongsTo(classPlayerVector->at(*selectedPlayer).getPlayerName());
+								classGameFieldVector->at(field_player_1).setBelongingNumber(*selectedPlayer);
+								classPlayerVector->at(*thisPlayer).removeFromMyGroupStrings(classGameFieldVector->at(field_player_1).getFieldName(), classGameFieldVector->at(field_player_1).getGroupPosition());
+								classPlayerVector->at(*thisPlayer).removeFromMyGroup(1, classGameFieldVector->at(field_player_1).getGroupPosition());
 
-							classPlayerVector->at(*selectedPlayer).addMyField(field_player_1);
-							classPlayerVector->at(*selectedPlayer).addToMyGroupStrings(classGameFieldVector->at(field_player_1).getFieldName(), classGameFieldVector->at(field_player_1).getGroupPosition());
-							classPlayerVector->at(*selectedPlayer).addToMyGroup(1, classGameFieldVector->at(field_player_1).getGroupPosition());
+								classPlayerVector->at(*selectedPlayer).addMyField(field_player_1);
+								classPlayerVector->at(*selectedPlayer).addToMyGroupStrings(classGameFieldVector->at(field_player_1).getFieldName(), classGameFieldVector->at(field_player_1).getGroupPosition());
+								classPlayerVector->at(*selectedPlayer).addToMyGroup(1, classGameFieldVector->at(field_player_1).getGroupPosition());
+							}
+							if (classGameFieldVector->at(field_player_2).getFieldType() != "Port") {	/*Execute this section if the SECOND traded field is NOT a port.*/
+								classGameFieldVector->at(field_player_2).setBelongsTo(classPlayerVector->at(*thisPlayer).getPlayerName());
+								classGameFieldVector->at(field_player_2).setBelongingNumber(*thisPlayer);
+								classPlayerVector->at(*selectedPlayer).removeFromMyGroupStrings(classGameFieldVector->at(field_player_2).getFieldName(), classGameFieldVector->at(field_player_2).getGroupPosition());
+								classPlayerVector->at(*selectedPlayer).removeFromMyGroup(1, classGameFieldVector->at(field_player_2).getGroupPosition());
 
-							classGameFieldVector->at(field_player_2).setBelongsTo(classPlayerVector->at(*thisPlayer).getPlayerName());
-							classGameFieldVector->at(field_player_2).setBelongingNumber(*thisPlayer);
-							classPlayerVector->at(*selectedPlayer).removeFromMyGroupStrings(classGameFieldVector->at(field_player_2).getFieldName(), classGameFieldVector->at(field_player_2).getGroupPosition());
-							classPlayerVector->at(*selectedPlayer).removeFromMyGroup(1, classGameFieldVector->at(field_player_2).getGroupPosition());
+								classPlayerVector->at(*thisPlayer).addMyField(field_player_2);
+								classPlayerVector->at(*thisPlayer).addToMyGroupStrings(classGameFieldVector->at(field_player_2).getFieldName(), classGameFieldVector->at(field_player_2).getGroupPosition());
+								classPlayerVector->at(*thisPlayer).addToMyGroup(1, classGameFieldVector->at(field_player_2).getGroupPosition());
+							}
 
-							classPlayerVector->at(*thisPlayer).addMyField(field_player_2);
-							classPlayerVector->at(*thisPlayer).addToMyGroupStrings(classGameFieldVector->at(field_player_2).getFieldName(), classGameFieldVector->at(field_player_2).getGroupPosition());
-							classPlayerVector->at(*thisPlayer).addToMyGroup(1, classGameFieldVector->at(field_player_2).getGroupPosition());
-						}
+							if(classGameFieldVector->at(field_player_1).getFieldType() == "Port") {		/*Execute this section if the FIRST traded field IS a port.*/
+								classGameFieldVector->at(field_player_1).setBelongsTo(classPlayerVector->at(*selectedPlayer).getPlayerName());
+								classGameFieldVector->at(field_player_1).setBelongingNumber(*selectedPlayer);
+								classPlayerVector->at(*thisPlayer).removeFromMyGroupStrings(classGameFieldVector->at(field_player_1).getFieldName(), classGameFieldVector->at(field_player_1).getGroupPosition());
+								classPlayerVector->at(*thisPlayer).removeFromMyGroup(1, classGameFieldVector->at(field_player_1).getGroupPosition());
+
+								classPlayerVector->at(*selectedPlayer).addMyField(field_player_1);
+								classPlayerVector->at(*selectedPlayer).addToMyGroupStrings(classGameFieldVector->at(field_player_1).getFieldName(), classGameFieldVector->at(field_player_1).getGroupPosition());
+								classPlayerVector->at(*selectedPlayer).addToMyGroup(1, classGameFieldVector->at(field_player_1).getGroupPosition());
+								classPlayerVector->at(*thisPlayer).removeMyPort(1);
+								classPlayerVector->at(*selectedPlayer).addMyPort(1);
+							}
+
+							if (classGameFieldVector->at(field_player_2).getFieldType() == "Port") {	/*Execute this section if the SECOND traded field IS a port.*/
+								classGameFieldVector->at(field_player_2).setBelongsTo(classPlayerVector->at(*thisPlayer).getPlayerName());
+								classGameFieldVector->at(field_player_2).setBelongingNumber(*thisPlayer);
+								classPlayerVector->at(*selectedPlayer).removeFromMyGroupStrings(classGameFieldVector->at(field_player_2).getFieldName(), classGameFieldVector->at(field_player_2).getGroupPosition());
+								classPlayerVector->at(*selectedPlayer).removeFromMyGroup(1, classGameFieldVector->at(field_player_2).getGroupPosition());
+
+								classPlayerVector->at(*thisPlayer).addMyField(field_player_2);
+								classPlayerVector->at(*thisPlayer).addToMyGroupStrings(classGameFieldVector->at(field_player_2).getFieldName(), classGameFieldVector->at(field_player_2).getGroupPosition());
+								classPlayerVector->at(*thisPlayer).addToMyGroup(1, classGameFieldVector->at(field_player_2).getGroupPosition());
+								classPlayerVector->at(*selectedPlayer).removeMyPort(1);
+								classPlayerVector->at(*thisPlayer).addMyPort(1);
+							}																	/*All playerstats and gamefield stats which are linked to each other*/
+						}																		/*will be switched after the trading is completed.*/
 						else {
 							goto tradeBegin;
 						}
@@ -111,20 +140,10 @@ public:
 			setTradeAbort(true);
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	/*
+	The player should be able to choose what object
+	shall be traded (money, fields, houses).
+	*/
 
 	}
 	void setTradeAbort(bool value) { tradeAbort = value; }	/*Switches tradeAbort between true and false, depending on the handed over value.*/
