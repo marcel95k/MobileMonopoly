@@ -8,12 +8,13 @@ using namespace std;
 
 class classPlayer {
 private:
-	string playerName;				/*Used as the playername during the entire program.*/
+		string playerName;				/*Used as the playername during the entire program.*/
 	int playerMoney;				/*Used as the money for each player during the entire progam.*/
 	int amountOfMyFields = 0;		/*Tells how many fields each player possesses.*/
 	int currentPosition = 0;		/*Tells the current position of a player on the gamefield.*/
 	int playerHouses = 0;			/*Tells how many HOUSES each player possesses.*/
 	int playerHotels = 0;			/*Tells how many HOTELS each player possesses.*/
+	int playerPorts = 0;
 	vector<string>myGroupStrings[9];/*Used to display the bought fields by a user.*/
 	vector<int>myGroup[9];			/*Used as to determine if a player has a full group to build a house.*/
 	vector <int> myField[40];		/*Tells the number of the field belonging to the player.*/
