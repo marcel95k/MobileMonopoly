@@ -98,6 +98,12 @@ bool checkforFullGroup(int position, string fieldTypeValue) { /*Check for full g
 	}
 	else { return false; }
 }
+void addMyPort(int value) {									/*Increases the value of playerPorts based on the handed over value.*/
+	playerPorts += value;
+}
+void removeMyPort(int value) {									/*Lower the value of playerPorts based on the handed over value.*/
+	playerPorts -= value;
+}
 void addMyField(int value) {									/*Pushes the handed over value to the vector myField.*/
 	myField->push_back(value);
 }
@@ -119,6 +125,7 @@ int getAmountOfMyFields() { return amountOfMyFields; }
 int getPlayerHouses() { return playerHouses; }
 int getPlayerHotels() { return playerHotels; }
 int getCurrentPosition() { return currentPosition; }
+int getMyPort() { return playerPorts; }
 void getMyGroupStrings() {
 	cout << "\n";
 	for (int x = 0; x < myGroupStrings->size(); x++) {
