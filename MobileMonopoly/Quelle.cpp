@@ -11,7 +11,6 @@
 #include "classBank.h"
 #include "classGameField.h"
 #include "classTrade.h"
-#include "classDice.h"
 
 using namespace std;
 
