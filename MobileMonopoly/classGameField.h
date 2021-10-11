@@ -60,7 +60,7 @@ void lowerAmountOfHouses(int value) {
 void setIsAvailable(bool value) {		/*Sets the value of isAvailable to the handed over value.*/
 	isAvailable = value;
 }
-void setIsPurchasable(bool value) {		/*Sets the value of isPurchasable to the handed over value.*/
+void classGameField::setIsPurchasable(bool value) {		/*Sets the value of isPurchasable to the handed over value.*/
 	isPurchasable = value;
 }
 void setRentWasDoubled(bool value) {	/*Sets the value of rentWasDoubled to the handed over value.*/
