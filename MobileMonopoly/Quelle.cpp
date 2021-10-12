@@ -197,7 +197,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 		}
 		if (classPlayerVector->at(thisPlayer).getIsInJail() == true) {	/*Check if the current player is in jail*/
 			cout << "You are in jail!\nPay 500!\n\n";					/*and let the player pay.*/
-			system("pause");									
+			system("pause");
 			cout << "\n";
 			cout << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\x1B[31m - 100\033[0m\n";
 			classPlayerVector->at(thisPlayer).losePlayerMoney(500);
@@ -307,8 +307,8 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 				tradePartner = userInput - 1;
 				classTrade trade;
 				trade.trade(classGameFieldVector, classPlayerVector, &thisPlayer, &tradePartner);
-				if (trade.getTradeAbort() == false) {								
-					system("cls");														
+				if (trade.getTradeAbort() == false) {
+					system("cls");
 					cout << "Trade completed!\n\n";
 					system("pause");
 				}
@@ -352,7 +352,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 				else {
 					cout << classPlayerVector->at(thisPlayer).getPlayerName() << ":\n";
 					cout << classPlayerVector->at(thisPlayer).getPlayerMoney() << "\x1B[31m - " << transferAmount << "\033[0m\n";
-					classPlayerVector->at(thisPlayer).losePlayerMoney(transferAmount);								
+					classPlayerVector->at(thisPlayer).losePlayerMoney(transferAmount);
 					cout << "NEW MONEY: " << classPlayerVector->at(thisPlayer).getPlayerMoney();
 					cout << "\n\n";
 					cout << classPlayerVector->at(otherPlayer).getPlayerName() << ":\n";
@@ -366,7 +366,7 @@ void gameRound(vector <classGameField>* classGameFieldVector, vector <classPlaye
 			}
 		}
 		else if (userInput == 4) {	/*VIEW PLAYER INFO*/																			/****************************************/
-playerInfoBegin:																													/*Viewing the info of a selected player.*/
+		playerInfoBegin:																													/*Viewing the info of a selected player.*/
 			system("cls");																											/*Currently viewing:					*/
 			cout << "Of which player do you want to see the info?\n\n";																/*				- Playername			*/
 			for (int listPlayers = 0; listPlayers < classPlayerVector->size(); listPlayers++) {										/*				- Money					*/
@@ -375,7 +375,7 @@ playerInfoBegin:																													/*Viewing the info of a selected pl
 			cout << "\nChoose: ";																									/*				  (Strings)				*/
 			cin >> userInput;																										/****************************************/
 			if (userInput <= classPlayerVector->size()) {
-				cout << "\nNAME:\t\t" << classPlayerVector->at(userInput - 1).getPlayerName() << "\n";									
+				cout << "\nNAME:\t\t" << classPlayerVector->at(userInput - 1).getPlayerName() << "\n";
 				cout << "MONEY:\t\t" << classPlayerVector->at(userInput - 1).getPlayerMoney() << "\n";
 				cout << "CURRENT FIELD:\t" << classGameFieldVector->at(classPlayerVector->at(userInput - 1).getCurrentPosition()).getFieldName() << "\n\n";
 				cout << "POSSESSIONS: ";
@@ -411,7 +411,7 @@ playerInfoBegin:																													/*Viewing the info of a selected pl
 				system("pause");
 				goto displayFieldBegin;
 			}
-			if (classGameFieldVector->at(userInput).getGroupPosition() != 0 && classGameFieldVector->at(userInput).getIsPurchasable() == true) {		/*Displaying the info of the field when it is a port.*/
+			if (classGameFieldVector->at(userInput).getGroupPosition() != 0 && classGameFieldVector->at(userInput).getIsPurchasable() == true) {		/*Displaying the info of the field when it is NOT a port.*/
 				system("cls");
 				cout << classGameFieldVector->at(userInput).getFieldName();
 				cout << "\n\nBELONGS TO: " << classGameFieldVector->at(userInput).getBelongsTo();
@@ -430,14 +430,14 @@ playerInfoBegin:																													/*Viewing the info of a selected pl
 				cout << "\n\n";
 				system("pause");
 			}
-			else if (classGameFieldVector->at(userInput).getGroupPosition() == 0 && classGameFieldVector->at(userInput).getIsPurchasable() == true) {	/*Displaying the info of the field when it is a port.*/
+			else if (classGameFieldVector->at(userInput).getGroupPosition() == 0 && classGameFieldVector->at(userInput).getIsPurchasable() == true) {	/*Displaying the info of the field when it IS a port.*/
 				system("cls");
 				cout << classGameFieldVector->at(userInput).getFieldName();
 				cout << "\n\nBELONGS TO: " << classGameFieldVector->at(userInput).getBelongsTo();
 				cout << "\n\nRent:\t\t\t1 Port:\t\t" << classGameFieldVector->at(userInput).getBaseRent();
 				cout << "\n\t\t\t2 Ports:\t" << classGameFieldVector->at(userInput).getBaseRent() * 2;
-				cout << "\n\t\t\t3 Ports:\t" << classGameFieldVector->at(userInput).getBaseRent() * 3;
-				cout << "\n\t\t\t4 Ports:\t" << classGameFieldVector->at(userInput).getBaseRent() * 4;
+				cout << "\n\t\t\t3 Ports:\t" << classGameFieldVector->at(userInput).getBaseRent() * 4;
+				cout << "\n\t\t\t4 Ports:\t" << classGameFieldVector->at(userInput).getBaseRent() * 8;
 				cout << "\n\nCurrent Rent: " << classGameFieldVector->at(userInput).getRent();
 				cout << "\n\n";
 				system("pause");
@@ -456,12 +456,12 @@ playerInfoBegin:																													/*Viewing the info of a selected pl
 				cout << "House sold!\n\n";
 				system("pause");
 			}
-			else if (sellHouse(classGameFieldVector, classPlayerVector, &thisPlayer) == false){
+			else if (sellHouse(classGameFieldVector, classPlayerVector, &thisPlayer) == false) {
 				goto gameRoundBegin;
 			}
 		}
 		else if (userInput == 7) {	/*RESIGN*/
-		int decision;
+			int decision;
 			system("cls");
 			cout << "Are you sure?";
 			cout << "\n\n[1] Yes";
@@ -538,8 +538,8 @@ void nonPurchasAbleFields(vector <classGameField>* classGameFieldVector, vector 
 		cout << "YOU HAVE TO GO TO JAIL!\n\n";
 		classPlayerVector->at(*thisPlayer).setIsInJail(true);				/*Set the value of isInJail in classPlayer to TRUE. */
 		for (int x = 0; x < 40; x++) {										/*Afterwards the player is put on the VISIT/JAIL field.*/
-			classPlayerVector->at(*thisPlayer).setNewPosition(1);					
-			if (classPlayerVector->at(*thisPlayer).getCurrentPosition() == 10) {	
+			classPlayerVector->at(*thisPlayer).setNewPosition(1);
+			if (classPlayerVector->at(*thisPlayer).getCurrentPosition() == 10) {
 				break;
 			}
 		}
@@ -590,7 +590,7 @@ purchasAbleFieldsBegin:
 				system("pause");
 				goto purchasAbleFieldsBegin;
 			}
-			
+
 			if (classGameFieldVector->at(field).getFieldType() != "Port") {												/*Execute this section if the bought field is NOT a port.*/
 				cout << "\n";
 				cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - ";
@@ -608,7 +608,7 @@ purchasAbleFieldsBegin:
 				cout << "\n\n";
 				system("pause");
 			}
-			else if (classGameFieldVector->at(field).getFieldType() == "Port") {										/*Execute this section if the bought field IS a port.*/		
+			else if (classGameFieldVector->at(field).getFieldType() == "Port") {										/*Execute this section if the bought field IS a port.*/
 				cout << "\n";
 				cout << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - ";
 				cout << classGameFieldVector->at(field).getPrice();
@@ -647,8 +647,8 @@ purchasAbleFieldsBegin:
 			cout << classGameFieldVector->at(field).getFieldName();
 			cout << "\n\nRent:\t\t\t1 Port:\t\t" << classGameFieldVector->at(field).getBaseRent();
 			cout << "\n\t\t\t2 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
-			cout << "\n\t\t\t3 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 3;
-			cout << "\n\t\t\t4 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 4;
+			cout << "\n\t\t\t3 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 4;
+			cout << "\n\t\t\t4 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 8;
 			cout << "\n\n";
 			system("pause");
 			goto purchasAbleFieldsBegin;
@@ -664,7 +664,7 @@ purchasAbleFieldsBegin:
 		if (classGameFieldVector->at(field).getAmoutOfHouses() <= 4) {
 			cout << "\nHOUSES: \t" << classGameFieldVector->at(field).getAmoutOfHouses() << "\n\n";
 		}
-		else { cout << "HOUSES: \t1 HOTEL\n"; }
+		else { cout << "\nHOUSES: \t1 HOTEL\n"; }
 		cout << "RENT:\t" << classGameFieldVector->at(field).getRent();
 		cout << "\nMONEY:\t" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		cout << "[1] PAY\n";
@@ -734,7 +734,7 @@ purchasAbleFieldsBegin:
 					cout << "\033[0m\n";
 					classPlayerVector->at(*thisPlayer).losePlayerMoney(classGameFieldVector->at(field).getPricePerHouse());
 					cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n";
-					classGameFieldVector->at(field).increaseAmountOfHouses(1);	
+					classGameFieldVector->at(field).increaseAmountOfHouses(1);
 					if (classGameFieldVector->at(field).getAmoutOfHouses() == 1) {
 						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 4);				/*The rent will be increased,*/
 						classPlayerVector->at(*thisPlayer).addHouses(1);															/*based on how many houses*/
@@ -746,11 +746,11 @@ purchasAbleFieldsBegin:
 					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 3) {												/*will be subtracted from playerHouses*/
 						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 24);			/*and the amount of playerHotels*/
 						classPlayerVector->at(*thisPlayer).addHouses(1);															/*in classPlayer will be increased.*/
-					}																												
-					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 4) {												
-						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 36);			
+					}
+					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 4) {
+						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 36);
 						classPlayerVector->at(*thisPlayer).addHouses(1);
-					}																												
+					}
 					else if (classGameFieldVector->at(field).getAmoutOfHouses() == 5) {
 						classGameFieldVector->at(field).increaseRent(classGameFieldVector->at(field).getBaseRent(), 48);
 						classPlayerVector->at(*thisPlayer).removeHouses(4);
@@ -766,7 +766,7 @@ purchasAbleFieldsBegin:
 					system("pause");
 					goto purchasAbleFieldsBegin;
 				}
-				else {																		
+				else {
 					system("cls");
 					cout << "You don't have all fields of this group!\n\n";
 					system("pause");
@@ -798,8 +798,8 @@ purchasAbleFieldsBegin:
 			cout << classGameFieldVector->at(field).getFieldName();
 			cout << "\n\nRent:\t\t\t1 Port:\t\t" << classGameFieldVector->at(field).getBaseRent();
 			cout << "\n\t\t\t2 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 2;
-			cout << "\n\t\t\t3 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 3;
-			cout << "\n\t\t\t4 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 4;
+			cout << "\n\t\t\t3 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 4;
+			cout << "\n\t\t\t4 Ports:\t" << classGameFieldVector->at(field).getBaseRent() * 8;
 			cout << "\n\nCurrent Rent: " << classGameFieldVector->at(field).getRent();
 			cout << "\n\n";
 			system("pause");
@@ -813,7 +813,7 @@ void eventsAndCommunityFields(vector <classGameField>* classGameFieldVector, vec
 	int userInput;
 	int getRandomEvent = rand() % 22 + 1;
 	if (getRandomEvent == 1 || getRandomEvent == 2) {	/*SPPEDING TICKET*/
-event_1:
+	event_1:
 		system("cls");
 		cout << "You got a speeding ticket!\n\n";
 		cout << "Pay 150!\n\n";
@@ -821,14 +821,14 @@ event_1:
 		cout << "Option: ";
 		cin >> userInput;
 		if (userInput == 1) {
-			cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 150\033[0m\n";	
+			cout << "\n" << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\x1B[31m - 150\033[0m\n";
 			classPlayerVector->at(*thisPlayer).losePlayerMoney(150);
 			cout << "NEW MONEY: " << classPlayerVector->at(*thisPlayer).getPlayerMoney() << "\n\n";
 		}
 		else { goto event_1; }
 	}
 	if (getRandomEvent == 3 || getRandomEvent == 4) {	/*RENOVATE*/
-event_2:
+	event_2:
 		int priceForHouses = classPlayerVector->at(*thisPlayer).getPlayerHouses() * 250;
 		int priceForHotels = classPlayerVector->at(*thisPlayer).getPlayerHotels() * 1000;
 		int totalAmount = priceForHouses + priceForHotels;
@@ -848,7 +848,7 @@ event_2:
 		else { goto event_2; }
 	}
 	if (getRandomEvent == 5 || getRandomEvent == 6) {	/*MOVE TO COPENHAGEN*/
-event_3:
+	event_3:
 		system("cls");
 		cout << "Move to \x1B[35mCOPENHAGEN\033[0m!\n\n";
 		cout << "Take 2000 if you pass START!\n\n";
@@ -870,7 +870,7 @@ event_3:
 		else { goto event_3; }
 	}
 	if (getRandomEvent == 7 || getRandomEvent == 8) {	/*FRIEND'S BIRTHDAY*/
-event_4:
+	event_4:
 		system("cls");
 		cout << "You have to pay for your friend's birthday!\n\n";
 		cout << "Pay 500!\n\n";
@@ -885,7 +885,7 @@ event_4:
 		else { goto event_4; }
 	}
 	if (getRandomEvent == 9 || getRandomEvent == 10) {	/*COMPANY INTERNATIONAL SUCCESS*/
-event_5:
+	event_5:
 		system("cls");
 		cout << "Your company is an international success!\n\n";
 		cout << "You get 1000!\n\n";
@@ -900,7 +900,7 @@ event_5:
 		else { goto event_5; }
 	}
 	if (getRandomEvent == 11 || getRandomEvent == 12) {	/*GO BACK 3 FIELDS*/
-event_6:
+	event_6:
 		system("cls");
 		cout << "Go 3 fields ahead!\n\n";
 		cout << "[1] GO\n";
@@ -913,7 +913,7 @@ event_6:
 		else { goto event_6; }
 	}
 	if (getRandomEvent == 13 || getRandomEvent == 14) {	/*GET FREE JAIL CARD*/
-event_7:
+	event_7:
 		system("cls");
 		cout << "You get a free from jail card!\n\n";
 		cout << "[1] GET\n";
@@ -949,7 +949,7 @@ event_7:
 		else { goto event_8; }
 	}
 	if (getRandomEvent == 17 || getRandomEvent == 18) {	/*GO TO START*/
-event_9:
+	event_9:
 		system("cls");
 		cout << "Move forward to START!\n\n";
 		cout << "Draw 2000!\n\n";
@@ -970,7 +970,7 @@ event_9:
 		else { goto event_9; }
 	}
 	if (getRandomEvent == 19 || getRandomEvent == 20) {	/*BELLY DANCE*/
-event_10:
+	event_10:
 		system("cls");
 		cout << "Your belly dance club in cairo caused an economic damage of 2000!\n\n";
 		cout << "You have to pay 2000!\n\n";
@@ -985,7 +985,7 @@ event_10:
 		else { goto event_10; }
 	}
 	if (getRandomEvent == 21 || getRandomEvent == 22) {	/*ECONOMIC SCAM*/
-event_11:
+	event_11:
 		system("cls");
 		cout << "You got arrested for an economic scam!\n\n";
 		cout << "Move to jail!\n\n";
@@ -1019,7 +1019,7 @@ event_11:
 	}
 }
 
-void doubleRentOnFullGroup(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector) {	/*Checking if the player posseses the full group and double the rent.*/	
+void doubleRentOnFullGroup(vector <classGameField>* classGameFieldVector, vector <classPlayer>* classPlayerVector) {	/*Checking if the player posseses the full group and double the rent.*/
 	for (int y = 0; y < classPlayerVector->size(); y++) {
 		for (int x = 0; x < classGameFieldVector->size(); x++) {
 			if (classPlayerVector->at(y).checkforFullGroup(classGameFieldVector->at(x).getGroupPosition(), classGameFieldVector->at(x).getFieldType()) == true && classGameFieldVector->at(x).getRentWasDoubled() == false) {
@@ -1035,6 +1035,12 @@ void calcPortRent(vector <classGameField>* classGameFieldVector, vector <classPl
 		for (int y = 0; y < classGameFieldVector->size(); y++) {
 			if (classGameFieldVector->at(y).getFieldType() == "Port" && classPlayerVector->at(x).getMyPort() > 0 && classGameFieldVector->at(y).getBelongsTo() == classPlayerVector->at(x).getPlayerName()) {
 				classGameFieldVector->at(y).setRent(classGameFieldVector->at(y).getBaseRent() * classPlayerVector->at(x).getMyPort());
+			}
+			if (classGameFieldVector->at(y).getFieldType() == "Port" && classPlayerVector->at(x).getMyPort() == 3 && classGameFieldVector->at(y).getBelongsTo() == classPlayerVector->at(x).getPlayerName()) {
+				classGameFieldVector->at(y).setRent(classGameFieldVector->at(y).getBaseRent() * classPlayerVector->at(x).getMyPort() + 250);
+			}
+			if (classGameFieldVector->at(y).getFieldType() == "Port" && classPlayerVector->at(x).getMyPort() == 4 && classGameFieldVector->at(y).getBelongsTo() == classPlayerVector->at(x).getPlayerName()) {
+				classGameFieldVector->at(y).setRent(classGameFieldVector->at(y).getBaseRent() * classPlayerVector->at(x).getMyPort() * 2);
 			}
 		}
 	}
@@ -1121,7 +1127,6 @@ int rollDice() {					/*This function is planned to be only used when rolling the
 	int dice_1;						/*and then added together to a new*/
 	int dice_2;						/*variable which represents*/
 	int diceSum;					/*the sum of both dices.*/
-	cin >> diceSum;
 	srand(time(NULL));
 	this_thread::sleep_for(chrono::seconds(1));
 	dice_1 = rand() % 6 + 1;
